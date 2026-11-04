@@ -11,6 +11,7 @@ from PySide6.QtGui import QColor, QPalette
 from PySide6.QtWidgets import QAbstractItemView, QApplication
 
 _DIR = Path(__file__).resolve().parent
+_ICONS = _DIR / "icons"
 TOKENS: dict = json.loads((_DIR / "tokens.json").read_text(encoding="utf-8"))
 
 _current: dict = TOKENS["dark"]
@@ -62,7 +63,7 @@ def resolve(mode: str, scheme: Qt.ColorScheme) -> str:
 
 def icon_path(kind: str, name: str | None = None) -> Path:
     """테마별 아이콘(check, radio, up, down) 경로. SVG 는 색을 직접 가지므로 테마마다 파일이 다르다."""
-    return _DIR / "icons" / f"{kind}_{name or _name or 'dark'}.svg"
+    return _ICONS / f"{kind}_{name or _name or 'dark'}.svg"
 
 
 # 역할 버튼: QPushButton 에 setProperty("role", "primary" | "danger"). 역할이 없거나 "secondary" 면 기본 모양.

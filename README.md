@@ -8,19 +8,25 @@ PySide6 + PyInstaller 데스크톱 앱용 다크(Graphite)·라이트(Paper) 테
 - 위젯 스타일은 Fusion 기준이다. `apply_theme` 이 처음 불릴 때 Fusion 으로 바꾼다.
 - 폰트는 건드리지 않는다. 앱이 `app.setFont(...)` 로 정한다.
 
-## 적용 (파일 복사)
+## 적용
 
-`graphite_paper/` 폴더를 프로젝트 루트에 통째로 복사한다 (`__pycache__` 는 빼고). 복사본은 직접 고치지 않는다. 앱 고유 규칙은 앱의 창 QSS 에 둔다.
+앱 프로젝트에는 테마 파일 하나와 아이콘 폴더만 생긴다. `graphite_paper/` 는 이 저장소의 원본이고 앱에 들어가지 않는다.
+
+```bash
+python skill/generate.py <앱 루트> --theme ui/theme.py --icons assets/icons
+```
 
 ```python
 from PySide6.QtWidgets import QApplication
-from graphite_paper import theme
+from ui import theme
 
 app = QApplication([])
 theme.apply_theme(app, "system")  # system(시스템 따라가기) / dark / light
 ```
 
-Claude Code 를 쓰면 `skill/` 의 `graphite-paper-theme` 스킬이 복사부터 캡처 확인까지 진행한다. 스킬 폴더에서 저장소로 링크를 건다.
+색표는 테마 파일 안에 들어가므로 파일은 혼자 동작한다. 이미 있는 파일은 덮어쓰지 않고 멈춘다 (`--force` 로 덮어쓰기).
+
+Claude Code 를 쓰면 `skill/` 의 `graphite-paper-theme` 스킬이 만들기부터 캡처 확인까지 진행한다. 스킬 폴더에서 저장소로 링크를 건다.
 
 ```powershell
 New-Item -ItemType SymbolicLink -Path "$HOME\.claude\skills\graphite-paper-theme" -Target "<저장소>\skill"
@@ -92,28 +98,28 @@ btn.setProperty("role", "primary")  # primary / secondary / danger. 없으면 se
 
 ## PyInstaller
 
-아이콘과 색표는 데이터 파일이라 spec 에 넣어야 한다. 빠지면 시작할 때 `tokens.json` 을 찾지 못해 실패한다. `LICENSE` 는 MIT 고지를 배포본에 포함하기 위한 것이다. onedir·onefile 모두 Windows 에서 확인했다.
-
-macOS 도 datas 는 같고, `--windowed` 스펙이 `.app` 을 만든다. 확인할 때는 `dist/앱.app/Contents/MacOS/앱` 을 터미널에서 실행한다. Finder 로 띄우면 환경변수가 줄어든다.
-
-폴더를 하위 패키지에 복사했으면 양쪽 경로를 패키지 위치에 맞춘다. 예: `app/ui/graphite_paper/tokens.json` → `app/ui/graphite_paper`.
+색표는 코드에 들어 있으므로 spec 에는 아이콘 폴더만 넣는다. 빠지면 체크 표시가 비어 보인다.
 
 ```python
 a = Analysis(
     ["main.py"],
     datas=[
-        ("graphite_paper/tokens.json", "graphite_paper"),
-        ("graphite_paper/icons", "graphite_paper/icons"),
-        ("graphite_paper/LICENSE", "graphite_paper"),
+        ("assets/icons", "assets/icons"),
     ],
 )
 ```
 
-SVG 를 읽는 Qt 플러그인은 PySide6 훅이 함께 묶는다 (onedir 빌드에서 확인). 스펙에서 `qsvg` 를 `excludes` 하지 않는다.
+onedir·onefile 모두 Windows 에서 확인했다.
+
+macOS 도 datas 는 같고, `--windowed` 스펙이 `.app` 을 만든다. 확인할 때는 `dist/앱.app/Contents/MacOS/앱` 을 터미널에서 실행한다. Finder 로 띄우면 환경변수가 줄어든다.
+
+SVG 를 읽는 Qt 플러그인은 PySide6 훅이 함께 묶는다. 스펙에서 `qsvg` 를 `excludes` 하지 않는다.
+
 
 ## 갱신
 
-복사본의 버전은 `graphite_paper/__init__.py` 의 `__version__` 이다. 새 버전은 폴더를 통째로 덮어쓰고, 색이 바뀌었으면 앱 화면을 다시 확인한다.
+앱의 테마 파일 머리에 만들 때의 버전이 적혀 있다. 원본의 버전은 `graphite_paper/__init__.py` 의 `__version__` 이다. 새 버전은 `generate.py --force` 로 다시 만들고 앱 화면을 확인한다. 앱에서 테마 파일을 직접 고치면 이때 사라지므로, 앱 고유 규칙은 창 QSS 에 둔다.
+
 
 ## 앱 설정과 연결
 
@@ -144,4 +150,4 @@ venv\Scripts\python gallery.py dark --shot shots/dark.png
 
 ## 라이선스
 
-MIT. `graphite_paper/LICENSE` 참고.
+MIT. `LICENSE` 참고. 만든 테마 파일 머리에 저작권과 라이선스 한 줄이 들어간다.

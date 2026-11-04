@@ -1,9 +1,11 @@
 ---
 name: graphite-paper-theme
-description: Applies or updates the Graphite (dark) / Paper (light) theme in a PySide6 desktop app or PyInstaller exe/app project on Windows or macOS. Use when starting a PySide6 app that needs a theme, adding dark/light mode or system color mode following to one, restyling one with this house theme, or updating a copied graphite_paper folder.
+description: Applies or updates the Graphite (dark) / Paper (light) theme in a PySide6 desktop app or PyInstaller exe/app project on Windows or macOS. Use when starting a PySide6 app that needs a theme, adding dark/light mode or system color mode following to one, restyling one with this house theme, or updating a theme generated earlier.
 ---
 
 # Graphite / Paper 테마 적용
+
+프로젝트에는 테마 파일 하나(기본 `ui/theme.py`)와 아이콘 폴더(기본 `assets/icons/`)만 생긴다. 앱의 일부로 읽히도록 원본 폴더 이름을 앱에 남기지 않는다.
 
 원본 저장소는 이 스킬 폴더의 실제 위치(심볼릭 링크를 따라간 경로)의 한 단계 위다. 거기에 `graphite_paper/` 가 없으면 멈추고 사용자에게 경로를 묻는다. 색 이름 규칙, 버튼 역할, 설정 연결 예는 원본의 `README.md` 에 있다. 시작할 때 읽는다.
 
@@ -13,20 +15,26 @@ description: Applies or updates the Graphite (dark) / Paper (light) theme in a P
 
 macOS 절차는 문서 근거로 썼고 실제 Mac 에서 돌려 본 적이 없다. 처음 쓸 때는 5단계 결과를 이 사실과 함께 보고한다.
 
-앱에 `graphite_paper/` 가 이미 있으면 맨 아래 **갱신** 으로 간다.
+첫 줄 근처에 `Graphite/Paper 테마` 가 적힌 테마 파일이 앱에 이미 있으면 맨 아래 **갱신** 으로 간다.
 
-## 1. 복사
+## 1. 만들기
 
-원본의 `graphite_paper/` 폴더를 `__pycache__` 없이 앱 루트에 복사한다. 앱이 패키지 구조면 그 패키지 안에 넣고, import 와 4단계 경로를 그 위치에 맞춘다. 복사본은 고치지 않는다. 앱 고유 규칙은 앱의 창 QSS 에 둔다.
+앱 구조를 보고 테마 파일과 아이콘 폴더 위치를 정한다. `ui/` 나 `assets/` 처럼 앱에 이미 있는 폴더를 따른다.
 
-완료: `python -c "from graphite_paper import theme; print(len(theme.TOKENS['dark']))"` 가 앱 루트에서 `22` 를 출력한다.
+```bash
+python "<원본>/skill/generate.py" "<앱 루트>" --theme ui/theme.py --icons assets/icons
+```
+
+이미 있는 파일이 있으면 아무것도 쓰지 않고 멈춘다. 그 파일이 앱의 다른 코드면 다른 경로를 고르거나 사용자에게 묻는다.
+
+완료: `python -c "from ui import theme; print(len(theme.TOKENS['dark']))"` 가 앱 루트에서 `22` 를 출력한다 (경로를 바꿨으면 import 도 맞춘다).
 
 ## 2. 연결
 
 `QApplication` 을 만든 직후, 창을 만들기 전에 부른다.
 
 ```python
-from graphite_paper import theme
+from ui import theme
 theme.apply_theme(app, mode)  # system / dark / light
 ```
 
@@ -37,7 +45,7 @@ theme.apply_theme(app, mode)  # system / dark / light
 
 ## 3. 직접 쓴 색 옮기기
 
-Grep 도구로 찾는다. 대소문자 무시, `*.py` `*.qss` `*.ui` 대상, `graphite_paper/` 제외. 셸에서 `rg` 로 돌릴 때는 경로 `.` 를 꼭 붙인다 (없으면 표준 입력을 기다린다).
+Grep 도구로 찾는다. 대소문자 무시, `*.py` `*.qss` `*.ui` 대상, 테마 파일 제외. 셸에서 `rg` 로 돌릴 때는 경로 `.` 를 꼭 붙인다 (없으면 표준 입력을 기다린다).
 
 ```text
 #[0-9a-fA-F]{3,8}\b|(rgba?|hsla?|hsva?)\(|QColor\(|QPalette\b|Qt\.(GlobalColor\.)?[a-zA-Z]*(white|black|red|green|blue|cyan|magenta|yellow|gray)\b|(color|background|border[a-z-]*)\s*:[^;"']*\b(white|black|red|green|blue|cyan|magenta|yellow|orange|purple|pink|brown|gray|grey|silver|navy|teal)\b
@@ -56,17 +64,15 @@ Grep 도구로 찾는다. 대소문자 무시, `*.py` `*.qss` `*.ui` 대상, `gr
 
 ## 4. 스펙에 넣기
 
-PyInstaller 를 쓰면 `.spec` 의 `Analysis(datas=[...])` 에 더한다. Windows 와 macOS 가 같고, onedir 와 onefile 도 같다.
+PyInstaller 를 쓰면 `.spec` 의 `Analysis(datas=[...])` 에 아이콘 폴더를 더한다. Windows 와 macOS 가 같고, onedir 와 onefile 도 같다. 양쪽 값은 1단계의 `--icons` 경로다.
 
 ```python
-("graphite_paper/tokens.json", "graphite_paper"),
-("graphite_paper/icons", "graphite_paper/icons"),
-("graphite_paper/LICENSE", "graphite_paper"),
+("assets/icons", "assets/icons"),
 ```
 
 스펙이 없고 사용자가 실행 파일을 원하면 `pyi-makespec --windowed main.py` 로 만든다. macOS 에서는 `--windowed` 가 `.app` 을 만드는 `BUNDLE` 블록을 넣는다. 빌드는 OS 마다 그 OS 에서 한다. `excludes` 에 `qsvg` 나 `PySide6.QtSvg` 가 있으면 뺀다.
 
-완료: 스펙에 세 줄이 있다.
+완료: 스펙에 아이콘 폴더 줄이 있다.
 
 ## 5. 캡처로 확인
 
@@ -91,7 +97,7 @@ if os.environ.get("THEME_SHOT"):  # 임시: 확인 후 지운다
 - Windows onedir: `dist\앱이름\앱이름.exe`
 - macOS: 터미널에서 `dist/앱이름.app/Contents/MacOS/앱이름` 을 직접 실행한다. Finder 로 띄우면 환경변수가 줄어 캡처가 돌지 않는다.
 
-Read 로 PNG 를 열어 두 테마를 눈으로 본다. 체크 표시, 글자와 바탕의 구분, 전환 뒤 옛 테마 색이 남은 곳을 본다. 빌드 결과에서 시작이 실패하거나 체크 표시가 비면 datas 나 `qsvg` 플러그인이 빠진 것이므로, 빌드 폴더에서 `tokens.json` 과 `*qsvg*` 를 찾아 본다. macOS `.app` 안의 데이터 위치는 문서로 확인하지 못했으니 이 실행 결과로 판단한다.
+Read 로 PNG 를 열어 두 테마를 눈으로 본다. 체크 표시, 글자와 바탕의 구분, 전환 뒤 옛 테마 색이 남은 곳을 본다. 빌드 결과에서 체크 표시가 비면 아이콘 폴더나 `qsvg` 플러그인이 빠진 것이므로, 빌드 폴더에서 `check_dark.svg` 와 `*qsvg*` 를 찾아 본다. macOS `.app` 안의 데이터 위치는 문서로 확인하지 못했으니 이 실행 결과로 판단한다.
 
 캡처는 주 창 하나만 찍는다. 대화상자, 메뉴, 제목 표시줄은 찍히지 않는다.
 
@@ -107,10 +113,9 @@ Read 로 PNG 를 열어 두 테마를 눈으로 본다. 체크 표시, 글자와
 
 ## 갱신
 
-1. 앱과 원본의 `graphite_paper/__init__.py` 에서 `__version__` 을 비교한다. 복사본에 없으면 1.1.0 이전이다.
-2. 폴더를 비교해 복사본을 직접 고친 곳을 찾는다. 있으면 덮어쓰기 전에 사용자에게 알리고, 앱 고유 규칙은 창 QSS 로 옮긴다.
-3. 폴더를 지우고 다시 복사한다 (1단계).
-4. 스펙의 datas 를 4단계와 맞춘다. 1.1.0 부터 `LICENSE` 가 추가됐다.
-5. 5·6단계를 돌린다.
+1. 테마 파일 머리의 버전과 원본 `graphite_paper/__init__.py` 의 `__version__` 을 비교한다. 같으면 끝낸다.
+2. 빈 임시 폴더에 앱과 같은 `--theme` `--icons` 로 새 버전을 만들어 앱의 파일과 비교한다. 차이에는 원본의 변경도 섞여 있으니 원본의 `git log` 와 함께 읽는다. 앱에서 직접 고친 부분은 사용자에게 알리고, 앱 고유 규칙은 창 QSS 로 옮긴다.
+3. 앱 루트에 `--force` 로 다시 만든다.
+4. 5·6단계를 돌린다.
 
-완료: 두 `__version__` 이 같고, 5·6단계의 완료 조건을 만족한다.
+완료: 테마 파일 머리의 버전이 원본과 같고, 5·6단계의 완료 조건을 만족한다.
