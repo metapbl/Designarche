@@ -1,0 +1,6 @@
+[tool.ruff]
+extend-exclude = ["venv"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
