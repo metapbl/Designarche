@@ -196,14 +196,14 @@ def test_button_roles_differ(app):
 
 
 def test_list_rows_in_layout_do_not_overlap(app):
-    # 레이아웃 안 목록은 스타일 적용 전 크기로 행을 배치한다. ::item 에 세로 크기를 주면 행이 겹친다
+    # 항목을 채운 뒤 레이아웃에 넣으면 행 간격이 스타일의 세로 크기를 반영하지 않아 행이 겹친다
     root = QWidget()
     items = QListWidget()
-    QVBoxLayout(root).addWidget(items)
     for i in range(3):
         item = QListWidgetItem(str(i))
         item.setCheckState(Qt.CheckState.Checked)
         items.addItem(item)
+    QVBoxLayout(root).addWidget(items)
     root.show()
     app.processEvents()
     first, second = items.visualItemRect(items.item(0)), items.visualItemRect(items.item(1))

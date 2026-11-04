@@ -73,7 +73,7 @@ btn.setProperty("role", "primary")  # primary / secondary / danger. 없으면 se
 - 라이트 자리표시자 글자: `muted` / `base` = 4.38
 - 라이트 primary 버튼 hover: `on_accent` / `accent2` = 3.94
 
-목록 행 높이는 공통 스타일로 키우지 않는다. 레이아웃 안 목록은 스타일 적용 전 크기로 행을 배치해서, `::item` 에 세로 `padding`·`height` 를 주면 행이 겹친다. 높이가 필요하면 `item.setSizeHint(...)` 나 델리게이트를 쓴다.
+목록 행 높이는 공통 스타일로 키우지 않는다. `::item` 에 세로 `padding`·`height` 를 주면, 항목을 채운 뒤 레이아웃에 넣은 목록에서 행이 겹친다 (6.12.0 에서 재현). 높이가 필요하면 `item.setSizeHint(...)` 나 델리게이트를 쓴다.
 
 진행률 막대는 글자를 숨긴다. 어떤 글자색도 `track` 과 `accent` 양쪽에서 읽히지 않으므로, 퍼센트는 옆 `QLabel` 에 쓴다.
 

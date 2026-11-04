@@ -95,7 +95,7 @@ QAbstractItemView {
     border: 1px solid @line; border-radius: 6px; outline: 0; gridline-color: @line;
 }
 QAbstractItemView:focus { border: 1px solid @accent; }
-/* 세로 padding·height 는 넣지 않는다: 레이아웃 안 목록은 스타일 적용 전 크기로 행을 배치해 행이 겹친다 */
+/* 세로 padding·height 는 넣지 않는다: 항목을 채운 뒤 레이아웃에 넣은 목록은 행 간격이 그대로라 행이 겹친다 */
 QAbstractItemView::item { padding: 0 6px; }
 QAbstractItemView::item:hover { background: @raised; }
 QAbstractItemView::item:selected { background: @sel; color: @text; }
