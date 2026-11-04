@@ -27,8 +27,8 @@ notifier = _Notifier()
 
 
 def qss(css: str) -> str:
-    """QSS 의 @이름 을 현재 테마 색으로 바꾼다. 없는 이름은 KeyError."""
-    return re.sub(r"@(\w+)", lambda m: _current[m.group(1)], css)
+    """QSS 의 @이름 을 현재 테마 색으로 바꾼다. 없는 이름은 KeyError. a@2x.png 같은 글자 뒤 @ 는 그대로 둔다."""
+    return re.sub(r"(?<!\w)@(\w+)", lambda m: _current[m.group(1)], css)
 
 
 def color(name: str) -> str:
@@ -42,7 +42,7 @@ def current() -> str | None:
 
 
 def resolve(mode: str, scheme: Qt.ColorScheme) -> str:
-    """설정값과 Windows 색 모드로 쓸 테마를 정한다. 알 수 없으면 다크."""
+    """설정값과 시스템 색 모드로 쓸 테마를 정한다. 알 수 없으면 다크."""
     if mode in TOKENS:
         return mode
     return "light" if scheme == Qt.ColorScheme.Light else "dark"
@@ -194,7 +194,7 @@ def _paint(app: QApplication) -> None:
 
 
 def _sync() -> None:
-    """설정과 Windows 색 모드에 맞춰 칠한다. 이미 그 테마면 아무것도 하지 않는다."""
+    """설정과 시스템 색 모드에 맞춰 칠한다. 이미 그 테마면 아무것도 하지 않는다."""
     global _current, _name
     app = QApplication.instance()
     name = resolve(_mode, app.styleHints().colorScheme())
@@ -209,7 +209,7 @@ def _sync() -> None:
 
 
 def apply_theme(app: QApplication, mode: str = "system") -> None:
-    """테마를 적용한다. mode: system(Windows 따라가기) / dark / light."""
+    """테마를 적용한다. mode: system(시스템 따라가기) / dark / light."""
     global _mode, _listening
     _mode = mode
     hints = app.styleHints()
@@ -217,7 +217,7 @@ def apply_theme(app: QApplication, mode: str = "system") -> None:
         app.setStyle("Fusion")  # QSS 와 팔레트는 Fusion 기준으로 맞췄다. windows11 스타일에서는 어긋난다
         hints.colorSchemeChanged.connect(lambda _scheme: _sync())
         _listening = True
-    # 제목 표시줄도 같은 색 모드를 쓰게 한다. Unknown 은 Windows 설정을 따른다.
+    # 제목 표시줄도 같은 색 모드를 쓰게 한다. Unknown 은 시스템 설정을 따른다.
     hints.setColorScheme(
         {"dark": Qt.ColorScheme.Dark, "light": Qt.ColorScheme.Light}.get(mode, Qt.ColorScheme.Unknown)
     )

@@ -23,15 +23,10 @@ MODES = ["dark", "light"]
 TEXT_PAIRS = [
     ("text", "base"), ("text", "surface"), ("text", "raised"), ("text", "sel"),
     ("text2", "base"), ("text2", "surface"), ("text2", "raised"), ("text2", "btn"), ("text2", "btn2"), ("text2", "sel"),
-    ("muted", "surface"),
+    ("muted", "base"), ("muted", "surface"), ("muted", "raised"),
     ("accent", "base"), ("accent", "surface"),
-    ("on_accent", "accent"), ("on_accent", "danger"),
+    ("on_accent", "accent"), ("on_accent", "accent2"), ("on_accent", "danger"),
     ("danger", "base"), ("danger", "surface"),
-]
-# AVD 색을 그대로 옮기면서 남은 미달. 3.0 은 넘겨야 하고, 고치면 이 표에서 빼라고 실패한다
-KNOWN_LOW = [
-    ("light", "muted", "base"),  # 자리표시자 글자
-    ("light", "on_accent", "accent2"),  # primary 버튼 hover
 ]
 
 
@@ -71,6 +66,10 @@ def test_qss_replaces_and_rejects_unknown_names(app):
         theme.qss("color: @nope;")
 
 
+def test_qss_leaves_at_sign_inside_paths(app):
+    assert theme.qss('image: url("a@2x.png");') == 'image: url("a@2x.png");'
+
+
 def test_app_qss_parses_without_warning(app):
     messages = []
     old = qInstallMessageHandler(lambda kind, _ctx, msg: kind != QtMsgType.QtDebugMsg and messages.append(msg))
@@ -89,12 +88,6 @@ def test_app_qss_parses_without_warning(app):
 def test_text_contrast(mode, fg, bg):
     tokens = theme.TOKENS[mode]
     assert contrast(tokens[fg], tokens[bg]) >= 4.5
-
-
-@pytest.mark.parametrize("mode, fg, bg", KNOWN_LOW)
-def test_known_low_contrast_is_still_low(mode, fg, bg):
-    tokens = theme.TOKENS[mode]
-    assert 3.0 <= contrast(tokens[fg], tokens[bg]) < 4.5
 
 
 @pytest.mark.parametrize("mode", MODES)
