@@ -6,9 +6,9 @@ import json
 import re
 from pathlib import Path
 
-from PySide6.QtCore import QObject, Qt, Signal
+from PySide6.QtCore import QEvent, QObject, Qt, Signal
 from PySide6.QtGui import QColor, QPalette
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QAbstractItemView, QApplication
 
 _DIR = Path(__file__).resolve().parent
 TOKENS: dict = json.loads((_DIR / "tokens.json").read_text(encoding="utf-8"))
@@ -24,6 +24,18 @@ class _Notifier(QObject):
 
 
 notifier = _Notifier()
+
+
+class _ViewRelayout(QObject):
+    """항목을 채운 뒤 레이아웃에 넣은 목록·트리는 행 간격이 스타일의 높이를 반영하지 않아 행이 겹친다. 스타일 적용 때 다시 배치한다."""
+
+    def eventFilter(self, watched: QObject, event: QEvent) -> bool:
+        if event.type() == QEvent.Type.Polish and isinstance(watched, QAbstractItemView):
+            watched.scheduleDelayedItemsLayout()
+        return False
+
+
+_view_relayout = _ViewRelayout()
 
 
 def qss(css: str) -> str:
@@ -95,8 +107,7 @@ QAbstractItemView {
     border: 1px solid @line; border-radius: 6px; outline: 0; gridline-color: @line;
 }
 QAbstractItemView:focus { border: 1px solid @accent; }
-/* 세로 padding·height 는 넣지 않는다: 항목을 채운 뒤 레이아웃에 넣은 목록은 행 간격이 그대로라 행이 겹친다 */
-QAbstractItemView::item { padding: 0 6px; }
+QAbstractItemView::item { padding: 0 6px; height: 22px; }
 QAbstractItemView::item:hover { background: @raised; }
 QAbstractItemView::item:selected { background: @sel; color: @text; }
 QAbstractItemView:disabled { color: @faint; }
@@ -132,7 +143,6 @@ QCheckBox:disabled, QRadioButton:disabled { color: @faint; }
 QCheckBox::indicator, QAbstractItemView::indicator {
     width: 16px; height: 16px; border-radius: 4px; border: 1px solid @muted; background: @base;
 }
-QAbstractItemView::indicator { width: 14px; height: 14px; }
 QRadioButton::indicator { width: 16px; height: 16px; border-radius: 9px; border: 1px solid @muted; background: @base; }
 QCheckBox::indicator:hover, QAbstractItemView::indicator:hover, QRadioButton::indicator:hover,
 QCheckBox::indicator:focus, QRadioButton::indicator:focus { border: 1px solid @accent; }
@@ -214,6 +224,7 @@ def apply_theme(app: QApplication, mode: str = "system") -> None:
     _mode = mode
     hints = app.styleHints()
     if not _listening:
+        app.installEventFilter(_view_relayout)
         app.setStyle("Fusion")  # QSS 와 팔레트는 Fusion 기준으로 맞췄다. windows11 스타일에서는 어긋난다
         hints.colorSchemeChanged.connect(lambda _scheme: _sync())
         _listening = True

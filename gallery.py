@@ -35,6 +35,13 @@ from PySide6.QtWidgets import (
 from graphite_paper import theme
 
 
+def _ink(background: str) -> str:
+    """견본 이름이 읽히도록 바탕에 맞춰 흑·백 중 대비가 큰 쪽을 고른다 (WCAG 상대 휘도)."""
+    channels = [int(background[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+    r, g, b = [c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4 for c in channels]
+    return "#000000" if 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.179 else "#ffffff"
+
+
 def _button(text: str, role: str = "", enabled: bool = True) -> QPushButton:
     btn = QPushButton(text)
     if role:
@@ -169,7 +176,8 @@ class Gallery(QMainWindow):
     def _paint_swatches(self) -> None:
         # 창이 스스로 칠하는 위젯은 notifier.changed 에 연결해 다시 칠한다
         for name, label in self._swatch_labels.items():
-            label.setStyleSheet(theme.qss(f"background: @{name}; color: @text; border: 1px solid @line;"))
+            ink = _ink(theme.color(name))
+            label.setStyleSheet(theme.qss(f"background: @{name}; color: {ink}; border: 1px solid @line;"))
 
 
 def main() -> int:

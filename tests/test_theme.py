@@ -12,10 +12,13 @@ from PySide6.QtWidgets import (
     QProgressBar,
     QPushButton,
     QRadioButton,
+    QTreeWidget,
+    QTreeWidgetItem,
     QVBoxLayout,
     QWidget,
 )
 
+from gallery import _ink
 from graphite_paper import theme
 
 MODES = ["dark", "light"]
@@ -188,9 +191,11 @@ def test_button_roles_differ(app):
     assert colors == {"primary": tokens["accent"], "secondary": tokens["btn"], "danger": tokens["danger"]}
 
 
-def test_list_rows_in_layout_do_not_overlap(app):
-    # 항목을 채운 뒤 레이아웃에 넣으면 행 간격이 스타일의 세로 크기를 반영하지 않아 행이 겹친다
+@pytest.mark.parametrize("own_style, height", [("", 22), ("QListWidget::item { height: 36px; }", 36)])
+def test_list_rows_filled_before_layout_do_not_overlap(app, own_style, height):
+    # 항목을 채운 뒤 레이아웃에 넣는 순서. 창이 자기 높이를 정해도 같아야 한다
     root = QWidget()
+    root.setStyleSheet(own_style)
     items = QListWidget()
     for i in range(3):
         item = QListWidgetItem(str(i))
@@ -201,5 +206,23 @@ def test_list_rows_in_layout_do_not_overlap(app):
     app.processEvents()
     first, second = items.visualItemRect(items.item(0)), items.visualItemRect(items.item(1))
     root.close()
-    assert second.y() - first.y() == first.height()
-    assert first.height() >= 16  # 표시기 14 + 테두리 2 가 들어간다
+    assert first.height() == height
+    assert second.y() - first.y() == height
+
+
+def test_tree_rows_filled_before_layout_use_style_height(app):
+    root = QWidget()
+    tree = QTreeWidget()
+    for i in range(3):
+        QTreeWidgetItem(tree, [str(i)])
+    QVBoxLayout(root).addWidget(tree)
+    root.show()
+    app.processEvents()
+    first, second = tree.visualItemRect(tree.topLevelItem(0)), tree.visualItemRect(tree.topLevelItem(1))
+    root.close()
+    assert second.y() - first.y() == first.height() == 22
+
+
+@pytest.mark.parametrize("mode", MODES)
+def test_gallery_swatch_names_are_readable(mode):
+    assert all(contrast(_ink(value), value) >= 4.5 for value in theme.TOKENS[mode].values())

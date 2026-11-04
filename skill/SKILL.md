@@ -48,7 +48,7 @@ Grep 도구로 찾는다. 대소문자 무시, `*.py` `*.qss` `*.ui` 대상, `gr
 - QSS 문자열은 `@이름` 으로 적고 `theme.qss(...)` 로 감싼다. `QColor` 와 `QPainter` 는 `QColor(theme.color("이름"))`.
 - 자기 색을 칠하는 창·위젯은 칠하는 코드를 메서드로 모으고 그 메서드를 `theme.notifier.changed` 에 연결한다. 커스텀 `paintEvent` 는 `self.update` 를 연결한다. 위젯을 잡은 람다는 그 위젯이 지워진 뒤 전환할 때 `RuntimeError` 를 내므로 메서드로 바꾼다.
 - 공통 스타일과 같은 규칙(버튼, 입력창, 스크롤바 등)은 옮기지 않고 지운다. 강조 버튼은 `setProperty("role", "primary")`, 위험 버튼은 `"danger"`.
-- `::item` 의 세로 `padding`·`height` 는 지우고 `item.setSizeHint(...)` 로 옮긴다. 항목을 채운 뒤 레이아웃에 넣는 목록에서 행이 겹친다.
+- 목록 행 높이는 공통 스타일이 22px 로 정한다. 앱에 다른 높이가 필요할 때만 창 QSS 의 `::item { height: ...; }` 로 둔다.
 - 글자에는 `text` `text2`, `base` `surface` `raised` 위의 `muted` 를 쓴다. `faint` 와 라이트의 `success` `success2` `warn` 은 일반 글자에서 뺀다.
 - 데이터의 색(차트 계열, 사용자가 고른 색, 로고)은 그대로 두고 목록으로 사용자에게 알린다.
 
