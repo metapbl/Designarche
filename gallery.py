@@ -143,8 +143,7 @@ class Gallery(QMainWindow):
             item = QListWidgetItem(f"목록 항목 {i + 1}")
             item.setCheckState(Qt.CheckState.Checked if i % 2 else Qt.CheckState.Unchecked)
             items.addItem(item)
-        # 표시 전에 선택하면 스타일 적용 전 높이로 행이 배치된다
-        QTimer.singleShot(0, lambda: items.setCurrentRow(1))
+        items.setCurrentRow(1)
         table = QTableWidget(30, 8)
         table.setAlternatingRowColors(True)
         table.setHorizontalHeaderLabels([f"열 {c + 1}" for c in range(8)])

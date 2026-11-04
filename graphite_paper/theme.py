@@ -95,7 +95,8 @@ QAbstractItemView {
     border: 1px solid @line; border-radius: 6px; outline: 0; gridline-color: @line;
 }
 QAbstractItemView:focus { border: 1px solid @accent; }
-QAbstractItemView::item { padding: 2px 6px; height: 22px; }
+/* 세로 padding·height 는 넣지 않는다: 레이아웃 안 목록은 스타일 적용 전 크기로 행을 배치해 행이 겹친다 */
+QAbstractItemView::item { padding: 0 6px; }
 QAbstractItemView::item:hover { background: @raised; }
 QAbstractItemView::item:selected { background: @sel; color: @text; }
 QAbstractItemView:disabled { color: @faint; }
@@ -131,6 +132,7 @@ QCheckBox:disabled, QRadioButton:disabled { color: @faint; }
 QCheckBox::indicator, QAbstractItemView::indicator {
     width: 16px; height: 16px; border-radius: 4px; border: 1px solid @muted; background: @base;
 }
+QAbstractItemView::indicator { width: 14px; height: 14px; }
 QRadioButton::indicator { width: 16px; height: 16px; border-radius: 9px; border: 1px solid @muted; background: @base; }
 QCheckBox::indicator:hover, QAbstractItemView::indicator:hover, QRadioButton::indicator:hover,
 QCheckBox::indicator:focus, QRadioButton::indicator:focus { border: 1px solid @accent; }

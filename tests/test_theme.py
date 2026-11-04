@@ -189,3 +189,20 @@ def test_button_roles_differ(app):
         colors[role] = btn.grab().toImage().pixelColor(30, 4).name()
     tokens = theme.TOKENS["dark"]
     assert colors == {"primary": tokens["accent"], "secondary": tokens["btn"], "danger": tokens["danger"]}
+
+
+def test_list_rows_in_layout_do_not_overlap(app):
+    # 레이아웃 안 목록은 스타일 적용 전 크기로 행을 배치한다. ::item 에 세로 크기를 주면 행이 겹친다
+    root = QWidget()
+    items = QListWidget()
+    QVBoxLayout(root).addWidget(items)
+    for i in range(3):
+        item = QListWidgetItem(str(i))
+        item.setCheckState(Qt.CheckState.Checked)
+        items.addItem(item)
+    root.show()
+    app.processEvents()
+    first, second = items.visualItemRect(items.item(0)), items.visualItemRect(items.item(1))
+    root.close()
+    assert second.y() - first.y() == first.height()
+    assert first.height() >= 16  # 표시기 14 + 테두리 2 가 들어간다
