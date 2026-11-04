@@ -7,6 +7,16 @@ from PySide6.QtGui import QColor, QImage, QPalette
 from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
+    QListWidget,
+    QListWidgetItem,
+    QProgressBar,
+    QPushButton,
+    QRadioButton,
+    QVBoxLayout,
+    QWidget,
+)
+    QApplication,
+    QCheckBox,
     QProgressBar,
     QPushButton,
     QRadioButton,
