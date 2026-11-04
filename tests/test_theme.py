@@ -15,12 +15,6 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-    QApplication,
-    QCheckBox,
-    QProgressBar,
-    QPushButton,
-    QRadioButton,
-)
 
 from graphite_paper import theme
 
