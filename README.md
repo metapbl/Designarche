@@ -69,7 +69,7 @@ btn.setProperty("role", "primary")  # primary / secondary / danger. 없으면 se
 
 켜진 기본 버튼은 바탕색(`surface`) + 진한 윤곽(`muted`) + `text` 글자이고, 꺼진 버튼만 회색으로 채운다(`raised` 바탕, `faint` 글자, `line` 윤곽). 회색 채움이 "누를 수 없음"으로 읽히는 Windows 11 관례를 따랐다. 채운 색은 `primary` `danger` 와 켜진 토글 버튼(`setCheckable(True)`)에만 쓴다.
 
-키보드 포커스는 2px 고리로 보인다(기본 버튼·체크박스·라디오는 `accent`, 채운 버튼은 `on_accent`). 1px 색 바꿈만으로는 `muted`→`accent` 대비가 1.0~1.4 라 보이지 않는다. 두께가 늘어난 만큼 padding 을 줄여 버튼 크기는 그대로다.
+키보드 포커스는 2px 고리로 보인다(기본 버튼·체크박스·라디오는 `accent`, 채운 버튼은 `on_accent`). 1px 색 바꿈만으로는 `muted`→`accent` 대비가 1.0~1.4 라 보이지 않는다. 두께가 늘어난 만큼 padding 을 줄여 버튼 크기는 그대로다. 버튼은 Fusion 의 포커스 네모를 지우고(`outline: none`) 고리만 보인다. 체크박스·라디오는 체크된 상태에서 그 네모가 유일한 포커스 표시라 남긴다.
 
 버튼·체크박스·라디오는 Windows 11 처럼 Tab 으로만 포커스를 받는다(`apply_theme` 이 Qt 기본값 `StrongFocus` 를 `TabFocus` 로 바꾼다). 그래서 클릭한 버튼에는 고리가 남지 않는다. 클릭으로도 포커스를 받아야 하는 버튼은 `ClickFocus` 처럼 `StrongFocus` 가 아닌 값을 직접 지정한다.
 

@@ -79,6 +79,7 @@ def icon_path(kind: str, name: str | None = None) -> Path:
 _APP_QSS = """
 QPushButton {
     background: @surface; color: @text; border: 1px solid @muted; border-radius: 6px; padding: 6px 14px;
+    outline: none;  /* Fusion 포커스 네모를 지운다. 포커스는 2px 고리로 보인다 */
 }
 QPushButton:hover { background: @raised; }
 QPushButton:pressed { background: @line; }

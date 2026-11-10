@@ -226,6 +226,30 @@ def test_focus_ring_is_two_pixels_and_keeps_size(app, mode, role, ring):
     window.close()
 
 
+@pytest.mark.parametrize("mode", MODES)
+@pytest.mark.parametrize("role", ["", "primary", "danger"])
+def test_focused_button_has_ring_only(app, mode, role):
+    # 2px 고리 안쪽은 포커스가 없을 때와 같아야 한다. Fusion 포커스 네모가 글자 둘레에 겹쳐 그려지던 문제
+    theme.apply_theme(app, mode)
+    window = QWidget()
+    layout = QVBoxLayout(window)
+    start, focused, other = QLineEdit(), QPushButton("포커스"), QPushButton("포커스")
+    layout.addWidget(start)
+    for btn in (focused, other):
+        btn.setProperty("role", role)
+        layout.addWidget(btn)
+    window.show()
+    window.activateWindow()
+    start.setFocus()
+    app.processEvents()
+    QTest.keyClick(start, Qt.Key.Key_Tab)  # Fusion 은 키보드로 옮긴 포커스에만 네모를 그린다
+    assert focused.hasFocus()
+    a, b = focused.grab().toImage(), other.grab().toImage()
+    inner = [(x, y) for x in range(6, a.width() - 6) for y in range(3, a.height() - 3)]  # 둥근 모서리 안티앨리어싱 제외
+    assert [p for p in inner if a.pixel(*p) != b.pixel(*p)] == []
+    window.close()
+
+
 @pytest.mark.parametrize("make", [lambda: QPushButton("x"), lambda: QCheckBox("x"), lambda: QRadioButton("x")])
 def test_buttons_take_focus_from_tab_not_click(app, make):
     # Windows 11 처럼 클릭으로는 포커스 고리가 남지 않고, Tab 이동 때만 보인다
