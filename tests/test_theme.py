@@ -180,15 +180,25 @@ def test_check_icon_is_drawn_in_stylesheet(app, mode):
     )
 
 
-def test_button_roles_differ(app):
+@pytest.mark.parametrize("mode", MODES)
+def test_button_roles_differ(app, mode):
+    # (윤곽, 바탕). 켜진 기본 버튼은 바탕색 + 진한 윤곽, 꺼진 버튼만 회색 채움
+    theme.apply_theme(app, mode)
     colors = {}
-    for role in ("primary", "secondary", "danger"):
+    for role, enabled in (("primary", True), ("secondary", True), ("danger", True), ("primary", False)):
         btn = QPushButton("x")
         btn.setProperty("role", role)
+        btn.setEnabled(enabled)
         btn.resize(60, 30)
-        colors[role] = btn.grab().toImage().pixelColor(30, 4).name()
-    tokens = theme.TOKENS["dark"]
-    assert colors == {"primary": tokens["accent"], "secondary": tokens["btn"], "danger": tokens["danger"]}
+        image = btn.grab().toImage()
+        colors[role if enabled else "disabled"] = (image.pixelColor(30, 0).name(), image.pixelColor(30, 4).name())
+    t = theme.TOKENS[mode]
+    assert colors == {
+        "primary": (t["accent"], t["accent"]),
+        "secondary": (t["muted"], t["surface"]),
+        "danger": (t["danger"], t["danger"]),
+        "disabled": (t["line"], t["raised"]),
+    }
 
 
 @pytest.mark.parametrize("own_style, height", [("", 22), ("QListWidget::item { height: 36px; }", 36)])

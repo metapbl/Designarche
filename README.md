@@ -67,6 +67,10 @@ btn.setProperty("role", "primary")  # primary / secondary / danger. 없으면 se
 
 표시 뒤에 역할을 바꾸면 `btn.style().unpolish(btn); btn.style().polish(btn)` 을 함께 부른다.
 
+켜진 기본 버튼은 바탕색(`surface`) + 진한 윤곽(`muted`) + `text` 글자이고, 꺼진 버튼만 회색으로 채운다(`raised` 바탕, `faint` 글자, `line` 윤곽). 회색 채움이 "누를 수 없음"으로 읽히는 Windows 11 관례를 따랐다. 채운 색은 `primary` 와 `danger` 에만 쓴다.
+
+창(위젯)의 스타일시트는 선택자 구체성과 관계없이 앱 스타일시트보다 우선한다. 창 QSS 에서 `QPushButton` 을 다시 쓰면 역할 버튼도 같이 덮이므로, 버튼 모양은 공통 스타일에 맡긴다.
+
 ## 색 이름 규칙
 
 대비는 WCAG 기준이고 일반 글자는 4.5 이상이어야 한다. `tests/test_theme.py` 가 아래 "글자" 쌍을 검사한다.
@@ -74,9 +78,9 @@ btn.setProperty("role", "primary")  # primary / secondary / danger. 없으면 se
 | 이름 | 용도 | 지킬 것 |
 |---|---|---|
 | `base` `surface` `raised` | 입력·목록 바탕 / 창 바탕 / 머리글 | |
-| `line` `line2` | 테두리 약하게 / 강하게 | |
-| `btn` `btn2` | 기본 버튼 / hover | |
-| `track` | 진행률·슬라이더 바탕 | |
+| `line` `line2` | 테두리 약하게 / 강하게 | 흰 `surface` 위 윤곽(묶음 상자, 카드, 목록)은 `line2` |
+| `btn` `btn2` | 팔레트 Button / 스크롤바 손잡이 | 공통 버튼 QSS 는 1.3.0 부터 쓰지 않는다 |
+| `track` | 앱이 그리는 막대 바탕 | 공통 진행률·슬라이더 홈은 `line2` (라이트 `track` 은 흰 바탕에 묻힌다) |
 | `sel` | 목록 선택 행 바탕 | 위 글자는 `text` |
 | `text` `text2` | 본문 / 보조 글자 | 어느 바탕에서나 가능 |
 | `muted` | 설명·상태 글자 | `base` `surface` `raised` 위에 쓴다. `btn` `btn2` 위에는 쓰지 않는다 |
@@ -92,7 +96,7 @@ btn.setProperty("role", "primary")  # primary / secondary / danger. 없으면 se
 
 목록 행 높이는 공통 스타일이 22px 로 정한다. 다른 높이가 필요하면 창 QSS 의 `::item { height: ...; }` 로 바꾼다.
 
-진행률 막대는 글자를 숨긴다. 어떤 글자색도 `track` 과 `accent` 양쪽에서 읽히지 않으므로, 퍼센트는 옆 `QLabel` 에 쓴다.
+진행률 막대는 글자를 숨긴다. 어떤 글자색도 `line2` 와 `accent` 양쪽에서 읽히지 않으므로, 퍼센트는 옆 `QLabel` 에 쓴다.
 
 색을 바꾸려면 `graphite_paper/tokens.json` 만 고친다. `check` `radio` `up` `down` SVG 는 색을 직접 가지므로 `accent` `on_accent` `text2` 를 바꾸면 SVG 도 고친다 (테스트가 불일치를 잡는다).
 

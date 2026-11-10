@@ -67,22 +67,23 @@ def icon_path(kind: str, name: str | None = None) -> Path:
 
 
 # 역할 버튼: QPushButton 에 setProperty("role", "primary" | "danger"). 역할이 없거나 "secondary" 면 기본 모양.
+# 켜진 기본 버튼은 바탕색 + 진한 윤곽, 꺼진 버튼만 회색으로 채운다 (Windows 11 관례). 채운 색은 역할 버튼에만.
 _APP_QSS = """
 QPushButton {
-    background: @btn; color: @text2; border: 1px solid transparent; border-radius: 6px; padding: 6px 14px;
+    background: @surface; color: @text; border: 1px solid @muted; border-radius: 6px; padding: 6px 14px;
 }
-QPushButton:hover { background: @btn2; }
-QPushButton:pressed { background: @line2; }
+QPushButton:hover { background: @raised; }
+QPushButton:pressed { background: @line; }
 QPushButton:focus { border: 1px solid @accent; }
-QPushButton[role="primary"] { background: @accent; color: @on_accent; font-weight: bold; }
-QPushButton[role="primary"]:hover { background: @accent2; }
+QPushButton[role="primary"] { background: @accent; color: @on_accent; border: 1px solid @accent; font-weight: bold; }
+QPushButton[role="primary"]:hover { background: @accent2; border: 1px solid @accent2; }
 QPushButton[role="primary"]:pressed { background: @accent; }
 QPushButton[role="primary"]:focus { border: 1px solid @text; }
 /* 글자는 on_strong 이 아니라 on_accent: 다크에서 on_strong 은 danger 위 대비가 3.3 이다 */
-QPushButton[role="danger"] { background: @danger; color: @on_accent; font-weight: bold; }
+QPushButton[role="danger"] { background: @danger; color: @on_accent; border: 1px solid @danger; font-weight: bold; }
 QPushButton[role="danger"]:hover, QPushButton[role="danger"]:focus { border: 1px solid @text; }
 QPushButton:disabled, QPushButton[role="primary"]:disabled, QPushButton[role="danger"]:disabled {
-    background: @raised; color: @faint; border: 1px solid transparent;
+    background: @raised; color: @faint; border: 1px solid @line;
 }
 
 QLineEdit, QPlainTextEdit, QTextEdit, QAbstractSpinBox, QComboBox {
@@ -93,7 +94,7 @@ QLineEdit:focus, QPlainTextEdit:focus, QTextEdit:focus, QAbstractSpinBox:focus, 
     border: 1px solid @accent;
 }
 QLineEdit:disabled, QPlainTextEdit:disabled, QTextEdit:disabled, QAbstractSpinBox:disabled, QComboBox:disabled {
-    background: @surface; color: @faint; border: 1px solid @line;
+    background: @base; color: @faint; border: 1px solid @line2;
 }
 
 QComboBox::drop-down { border: none; width: 20px; }
@@ -105,7 +106,7 @@ QAbstractSpinBox::down-arrow { image: url("%down%"); width: 10px; height: 10px; 
 
 QAbstractItemView {
     background: @base; alternate-background-color: @surface; color: @text;
-    border: 1px solid @line; border-radius: 6px; outline: 0; gridline-color: @line;
+    border: 1px solid @line2; border-radius: 6px; outline: 0; gridline-color: @line;
 }
 QAbstractItemView:focus { border: 1px solid @accent; }
 QAbstractItemView::item { padding: 0 6px; height: 22px; }
@@ -119,15 +120,16 @@ QHeaderView::section {
 }
 QTableCornerButton::section { background: @raised; border: none; }
 
-/* 글자는 숨긴다: 어떤 글자색도 track 과 accent 양쪽에서 읽히지 않는다. 퍼센트는 옆 QLabel 로 */
-QProgressBar { background: @track; color: transparent; border: none; border-radius: 3px; max-height: 6px; }
+/* 글자는 숨긴다: 어떤 글자색도 line2 와 accent 양쪽에서 읽히지 않는다. 퍼센트는 옆 QLabel 로.
+   홈은 track 이 아니라 line2: 라이트 track 은 흰 surface 위에서 보이지 않는다 */
+QProgressBar { background: @line2; color: transparent; border: none; border-radius: 3px; max-height: 6px; }
 QProgressBar::chunk { background: @accent; border-radius: 3px; }
 
-QGroupBox { color: @text2; border: 1px solid @line; border-radius: 6px; margin-top: 8px; padding: 12px 8px 8px 8px; }
+QGroupBox { color: @text2; border: 1px solid @line2; border-radius: 6px; margin-top: 8px; padding: 12px 8px 8px 8px; }
 QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 4px; }
 
-QSlider::groove:horizontal { background: @track; height: 6px; border-radius: 3px; }
-QSlider::groove:vertical { background: @track; width: 6px; border-radius: 3px; }
+QSlider::groove:horizontal { background: @line2; height: 6px; border-radius: 3px; }
+QSlider::groove:vertical { background: @line2; width: 6px; border-radius: 3px; }
 QSlider::sub-page:horizontal, QSlider::add-page:vertical { background: @accent; border-radius: 3px; }
 QSlider::handle:horizontal, QSlider::handle:vertical {
     background: @accent; width: 12px; height: 12px; border: 2px solid @surface; border-radius: 8px;
@@ -208,6 +210,7 @@ def _sync() -> None:
     """설정과 시스템 색 모드에 맞춰 칠한다. 이미 그 테마면 아무것도 하지 않는다."""
     global _current, _name
     app = QApplication.instance()
+    assert isinstance(app, QApplication), "apply_theme(app) 을 먼저 부른다"
     name = resolve(_mode, app.styleHints().colorScheme())
     if name == _name:
         return
