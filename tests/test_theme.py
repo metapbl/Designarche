@@ -201,6 +201,41 @@ def test_button_roles_differ(app, mode):
     }
 
 
+@pytest.mark.parametrize("mode", MODES)
+@pytest.mark.parametrize("role, ring", [("", "accent"), ("primary", "on_accent"), ("danger", "on_accent")])
+def test_focus_ring_is_two_pixels_and_keeps_size(app, mode, role, ring):
+    # 1px 색 바꿈은 muted→accent 대비가 1.0~1.4 라 보이지 않았다. 안쪽 1px 까지 고리색이어야 한다
+    theme.apply_theme(app, mode)
+    window = QWidget()
+    layout = QVBoxLayout(window)
+    focused, other = QPushButton("x"), QPushButton("x")
+    for btn in (focused, other):
+        btn.setProperty("role", role)
+        layout.addWidget(btn)
+    window.show()
+    window.activateWindow()
+    focused.setFocus()
+    app.processEvents()
+    image = focused.grab().toImage()
+    ring_color = theme.TOKENS[mode][ring]
+    assert focused.hasFocus()
+    assert (image.pixelColor(30, 0).name(), image.pixelColor(30, 1).name()) == (ring_color, ring_color)
+    assert focused.size() == other.size()
+    window.close()
+
+
+@pytest.mark.parametrize("mode", MODES)
+def test_checked_toggle_button_is_filled(app, mode):
+    theme.apply_theme(app, mode)
+    btn = QPushButton("x")
+    btn.setCheckable(True)
+    btn.resize(60, 30)
+    off = btn.grab().toImage().pixelColor(30, 4).name()
+    btn.setChecked(True)
+    on = btn.grab().toImage().pixelColor(30, 4).name()
+    assert (off, on) == (theme.TOKENS[mode]["surface"], theme.TOKENS[mode]["accent"])
+
+
 @pytest.mark.parametrize("own_style, height", [("", 22), ("QListWidget::item { height: 36px; }", 36)])
 def test_list_rows_filled_before_layout_do_not_overlap(app, own_style, height):
     # 항목을 채운 뒤 레이아웃에 넣는 순서. 창이 자기 높이를 정해도 같아야 한다

@@ -74,14 +74,21 @@ QPushButton {
 }
 QPushButton:hover { background: @raised; }
 QPushButton:pressed { background: @line; }
-QPushButton:focus { border: 1px solid @accent; }
+/* 포커스는 2px: 1px 색 바꿈만으로는 muted→accent 대비가 1.0~1.4 라 보이지 않는다. 안쪽 1px 은 바탕→고리색 대비로 3:1 을 넘긴다.
+   두께가 늘어난 만큼 padding 을 줄여 크기를 지킨다 */
+QPushButton:focus { border: 2px solid @accent; padding: 5px 13px; }
+/* 토글 버튼(setCheckable) 켜짐: Windows 11 관례대로 강조색 채움 */
+QPushButton:checked { background: @accent; color: @on_accent; border: 1px solid @accent; }
+QPushButton:checked:hover { background: @accent2; border: 1px solid @accent2; }
+QPushButton:checked:focus { border: 2px solid @on_accent; padding: 5px 13px; }
 QPushButton[role="primary"] { background: @accent; color: @on_accent; border: 1px solid @accent; font-weight: bold; }
 QPushButton[role="primary"]:hover { background: @accent2; border: 1px solid @accent2; }
 QPushButton[role="primary"]:pressed { background: @accent; }
-QPushButton[role="primary"]:focus { border: 1px solid @text; }
+QPushButton[role="primary"]:focus { border: 2px solid @on_accent; padding: 5px 13px; }
 /* 글자는 on_strong 이 아니라 on_accent: 다크에서 on_strong 은 danger 위 대비가 3.3 이다 */
 QPushButton[role="danger"] { background: @danger; color: @on_accent; border: 1px solid @danger; font-weight: bold; }
-QPushButton[role="danger"]:hover, QPushButton[role="danger"]:focus { border: 1px solid @text; }
+QPushButton[role="danger"]:hover { border: 1px solid @text; }
+QPushButton[role="danger"]:focus { border: 2px solid @on_accent; padding: 5px 13px; }
 QPushButton:disabled, QPushButton[role="primary"]:disabled, QPushButton[role="danger"]:disabled {
     background: @raised; color: @faint; border: 1px solid @line;
 }
@@ -147,8 +154,8 @@ QCheckBox::indicator, QAbstractItemView::indicator {
     width: 16px; height: 16px; border-radius: 4px; border: 1px solid @muted; background: @base;
 }
 QRadioButton::indicator { width: 16px; height: 16px; border-radius: 9px; border: 1px solid @muted; background: @base; }
-QCheckBox::indicator:hover, QAbstractItemView::indicator:hover, QRadioButton::indicator:hover,
-QCheckBox::indicator:focus, QRadioButton::indicator:focus { border: 1px solid @accent; }
+QCheckBox::indicator:hover, QAbstractItemView::indicator:hover, QRadioButton::indicator:hover { border: 1px solid @accent; }
+QCheckBox::indicator:focus, QRadioButton::indicator:focus { border: 2px solid @accent; }
 QCheckBox::indicator:checked, QAbstractItemView::indicator:checked {
     background: @accent; border: 1px solid @accent; image: url("%check%");
 }
@@ -156,7 +163,7 @@ QCheckBox::indicator:checked:hover, QAbstractItemView::indicator:checked:hover {
     background: @accent2; border: 1px solid @accent2;
 }
 QRadioButton::indicator:checked { background: @accent; border: 1px solid @accent; image: url("%radio%"); }
-QCheckBox::indicator:checked:focus, QRadioButton::indicator:checked:focus { border: 1px solid @text; }
+QCheckBox::indicator:checked:focus, QRadioButton::indicator:checked:focus { border: 2px solid @on_accent; }
 QCheckBox::indicator:disabled, QRadioButton::indicator:disabled { background: @surface; border: 1px solid @line2; }
 QCheckBox::indicator:checked:disabled, QRadioButton::indicator:checked:disabled {
     background: @faint; border: 1px solid @faint; image: none;

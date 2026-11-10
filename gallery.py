@@ -91,12 +91,19 @@ class Gallery(QMainWindow):
     def _buttons(self) -> QGroupBox:
         tip = _button("secondary (툴팁)")
         tip.setToolTip("QToolTip 스타일 확인")
+        toggle = _button("토글 켜짐")
+        toggle.setCheckable(True)
+        toggle.setChecked(True)
+        focused = _button("포커스")
+        QTimer.singleShot(0, focused.setFocus)
         return _group(
             "버튼 역할",
             _button("primary", "primary"),
             tip,
             _button("danger", "danger"),
             _button("disabled", "primary", enabled=False),
+            toggle,
+            focused,
             layout=QHBoxLayout,
         )
 

@@ -67,7 +67,9 @@ btn.setProperty("role", "primary")  # primary / secondary / danger. 없으면 se
 
 표시 뒤에 역할을 바꾸면 `btn.style().unpolish(btn); btn.style().polish(btn)` 을 함께 부른다.
 
-켜진 기본 버튼은 바탕색(`surface`) + 진한 윤곽(`muted`) + `text` 글자이고, 꺼진 버튼만 회색으로 채운다(`raised` 바탕, `faint` 글자, `line` 윤곽). 회색 채움이 "누를 수 없음"으로 읽히는 Windows 11 관례를 따랐다. 채운 색은 `primary` 와 `danger` 에만 쓴다.
+켜진 기본 버튼은 바탕색(`surface`) + 진한 윤곽(`muted`) + `text` 글자이고, 꺼진 버튼만 회색으로 채운다(`raised` 바탕, `faint` 글자, `line` 윤곽). 회색 채움이 "누를 수 없음"으로 읽히는 Windows 11 관례를 따랐다. 채운 색은 `primary` `danger` 와 켜진 토글 버튼(`setCheckable(True)`)에만 쓴다.
+
+키보드 포커스는 2px 고리로 보인다(기본 버튼·체크박스·라디오는 `accent`, 채운 버튼은 `on_accent`). 1px 색 바꿈만으로는 `muted`→`accent` 대비가 1.0~1.4 라 보이지 않는다. 두께가 늘어난 만큼 padding 을 줄여 버튼 크기는 그대로다.
 
 창(위젯)의 스타일시트는 선택자 구체성과 관계없이 앱 스타일시트보다 우선한다. 창 QSS 에서 `QPushButton` 을 다시 쓰면 역할 버튼도 같이 덮이므로, 버튼 모양은 공통 스타일에 맡긴다.
 
