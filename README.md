@@ -73,6 +73,8 @@ btn.setProperty("role", "primary")  # primary / secondary / danger. 없으면 se
 
 버튼·체크박스·라디오는 Windows 11 처럼 Tab 으로만 포커스를 받는다(`apply_theme` 이 Qt 기본값 `StrongFocus` 를 `TabFocus` 로 바꾼다). 그래서 클릭한 버튼에는 고리가 남지 않는다. 클릭으로도 포커스를 받아야 하는 버튼은 `ClickFocus` 처럼 `StrongFocus` 가 아닌 값을 직접 지정한다.
 
+대화상자 밖에서 포커스 받은 `QPushButton` 은 Enter 로도 눌린다(Qt 기본은 Space 만). 대화상자 안은 Qt 의 기본 버튼·`autoDefault` 규칙을 그대로 따른다. 그래서 `setAutoDefault(False)` 로 둔 버튼에 포커스가 있으면 Enter 는 기본 버튼을 누른다.
+
 창(위젯)의 스타일시트는 선택자 구체성과 관계없이 앱 스타일시트보다 우선한다. 창 QSS 에서 `QPushButton` 을 다시 쓰면 역할 버튼도 같이 덮이므로, 버튼 모양은 공통 스타일에 맡긴다.
 
 ## 색 이름 규칙

@@ -8,9 +8,11 @@ from PySide6.QtTest import QTest
 from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
+    QDialog,
     QLineEdit,
     QListWidget,
     QListWidgetItem,
+    QMainWindow,
     QProgressBar,
     QPushButton,
     QRadioButton,
@@ -267,6 +269,67 @@ def test_buttons_take_focus_from_tab_not_click(app, make):
     QTest.keyClick(first, Qt.Key.Key_Tab)
     assert target.hasFocus()
     window.close()
+
+
+def _clicks(btn: QPushButton) -> list:
+    clicks: list = []
+    btn.clicked.connect(lambda: clicks.append(btn))
+    return clicks
+
+
+@pytest.mark.parametrize("key", [Qt.Key.Key_Return, Qt.Key.Key_Enter])
+def test_enter_presses_focused_button_outside_dialog(app, key):
+    window = QMainWindow()
+    btn = QPushButton("x")
+    window.setCentralWidget(btn)
+    clicks = _clicks(btn)
+    window.show()
+    window.activateWindow()
+    btn.setFocus()
+    app.processEvents()
+    QTest.keyClick(btn, key)
+    QTest.qWait(200)  # animateClick 은 잠시 뒤 clicked 를 낸다
+    assert clicks == [btn]
+    window.close()
+
+
+def test_enter_ignores_disabled_button(app):
+    window = QMainWindow()
+    btn = QPushButton("x")
+    window.setCentralWidget(btn)
+    clicks = _clicks(btn)
+    window.show()
+    btn.setEnabled(False)
+    QTest.keyClick(btn, Qt.Key.Key_Return)
+    QTest.qWait(200)
+    assert clicks == []
+    window.close()
+
+
+def test_enter_in_dialog_keeps_default_button_rules(app):
+    # 삭제 확인 창 같은 안전장치: autoDefault 를 끈 "제거" 에 포커스가 있어도 Enter 는 기본 버튼 "닫기" 를 누른다
+    dialog = QDialog()
+    layout = QVBoxLayout(dialog)
+    close, remove, other = QPushButton("닫기"), QPushButton("제거"), QPushButton("다른")
+    close.setDefault(True)
+    remove.setAutoDefault(False)
+    for btn in (close, remove, other):
+        layout.addWidget(btn)
+    clicks = {btn.text(): _clicks(btn) for btn in (close, remove, other)}
+    dialog.show()
+    dialog.activateWindow()
+    remove.setFocus()
+    app.processEvents()
+    QTest.keyClick(remove, Qt.Key.Key_Return)
+    QTest.qWait(200)
+    assert {name: len(c) for name, c in clicks.items()} == {"닫기": 1, "제거": 0, "다른": 0}
+    dialog.show()
+    other.setFocus()
+    app.processEvents()
+    QTest.keyClick(other, Qt.Key.Key_Return)
+    QTest.qWait(200)
+    assert {name: len(c) for name, c in clicks.items()} == {"닫기": 1, "제거": 0, "다른": 1}
+    dialog.close()
 
 
 def test_buttons_keep_focus_policy_the_app_chose(app):
