@@ -71,6 +71,8 @@ btn.setProperty("role", "primary")  # primary / secondary / danger. 없으면 se
 
 키보드 포커스는 2px 고리로 보인다(기본 버튼·체크박스·라디오는 `accent`, 채운 버튼은 `on_accent`). 1px 색 바꿈만으로는 `muted`→`accent` 대비가 1.0~1.4 라 보이지 않는다. 두께가 늘어난 만큼 padding 을 줄여 버튼 크기는 그대로다.
 
+버튼·체크박스·라디오는 Windows 11 처럼 Tab 으로만 포커스를 받는다(`apply_theme` 이 Qt 기본값 `StrongFocus` 를 `TabFocus` 로 바꾼다). 그래서 클릭한 버튼에는 고리가 남지 않는다. 클릭으로도 포커스를 받아야 하는 버튼은 `ClickFocus` 처럼 `StrongFocus` 가 아닌 값을 직접 지정한다.
+
 창(위젯)의 스타일시트는 선택자 구체성과 관계없이 앱 스타일시트보다 우선한다. 창 QSS 에서 `QPushButton` 을 다시 쓰면 역할 버튼도 같이 덮이므로, 버튼 모양은 공통 스타일에 맡긴다.
 
 ## 색 이름 규칙

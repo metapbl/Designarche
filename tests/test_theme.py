@@ -4,9 +4,11 @@ import re
 import pytest
 from PySide6.QtCore import Qt, QtMsgType, qInstallMessageHandler
 from PySide6.QtGui import QColor, QImage, QPalette
+from PySide6.QtTest import QTest
 from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
+    QLineEdit,
     QListWidget,
     QListWidgetItem,
     QProgressBar,
@@ -222,6 +224,34 @@ def test_focus_ring_is_two_pixels_and_keeps_size(app, mode, role, ring):
     assert (image.pixelColor(30, 0).name(), image.pixelColor(30, 1).name()) == (ring_color, ring_color)
     assert focused.size() == other.size()
     window.close()
+
+
+@pytest.mark.parametrize("make", [lambda: QPushButton("x"), lambda: QCheckBox("x"), lambda: QRadioButton("x")])
+def test_buttons_take_focus_from_tab_not_click(app, make):
+    # Windows 11 처럼 클릭으로는 포커스 고리가 남지 않고, Tab 이동 때만 보인다
+    window = QWidget()
+    layout = QVBoxLayout(window)
+    first, target = QLineEdit(), make()
+    layout.addWidget(first)
+    layout.addWidget(target)
+    window.show()
+    window.activateWindow()
+    first.setFocus()
+    app.processEvents()
+    QTest.mouseClick(target, Qt.MouseButton.LeftButton)
+    assert not target.hasFocus()
+    QTest.keyClick(first, Qt.Key.Key_Tab)
+    assert target.hasFocus()
+    window.close()
+
+
+def test_buttons_keep_focus_policy_the_app_chose(app):
+    btn = QPushButton("x")
+    btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+    btn.show()
+    app.processEvents()
+    assert btn.focusPolicy() == Qt.FocusPolicy.NoFocus
+    btn.close()
 
 
 @pytest.mark.parametrize("mode", MODES)

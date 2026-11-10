@@ -8,7 +8,7 @@ from pathlib import Path
 
 from PySide6.QtCore import QEvent, QObject, Qt, Signal
 from PySide6.QtGui import QColor, QPalette
-from PySide6.QtWidgets import QAbstractItemView, QApplication
+from PySide6.QtWidgets import QAbstractButton, QAbstractItemView, QApplication
 
 _DIR = Path(__file__).resolve().parent
 _ICONS = _DIR / "icons"
@@ -27,16 +27,24 @@ class _Notifier(QObject):
 notifier = _Notifier()
 
 
-class _ViewRelayout(QObject):
-    """항목을 채운 뒤 레이아웃에 넣은 목록·트리는 행 간격이 스타일의 높이를 반영하지 않아 행이 겹친다. 스타일 적용 때 다시 배치한다."""
+class _OnPolish(QObject):
+    """스타일을 입힐 때(Polish) 위젯마다 한 번씩 손본다.
+
+    - 항목을 채운 뒤 레이아웃에 넣은 목록·트리는 행 간격이 스타일의 높이를 반영하지 않아 행이 겹친다. 다시 배치한다.
+    - 버튼류는 Qt 기본(StrongFocus)대로면 클릭만 해도 포커스 고리가 남는다. Windows 11 처럼 Tab 으로만 포커스를 받게 한다.
+    """
 
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:
-        if event.type() == QEvent.Type.Polish and isinstance(watched, QAbstractItemView):
-            watched.scheduleDelayedItemsLayout()
+        if event.type() == QEvent.Type.Polish:
+            if isinstance(watched, QAbstractItemView):
+                watched.scheduleDelayedItemsLayout()
+            # shortcut: 기본값과 앱이 직접 고른 StrongFocus 를 구별하지 못한다. 클릭 포커스가 필요한 버튼은 ClickFocus 로 지정하게 한다
+            elif isinstance(watched, QAbstractButton) and watched.focusPolicy() == Qt.FocusPolicy.StrongFocus:
+                watched.setFocusPolicy(Qt.FocusPolicy.TabFocus)
         return False
 
 
-_view_relayout = _ViewRelayout()
+_on_polish = _OnPolish()
 
 
 def qss(css: str) -> str:
@@ -235,7 +243,7 @@ def apply_theme(app: QApplication, mode: str = "system") -> None:
     _mode = mode
     hints = app.styleHints()
     if not _listening:
-        app.installEventFilter(_view_relayout)
+        app.installEventFilter(_on_polish)
         app.setStyle("Fusion")  # QSS 와 팔레트는 Fusion 기준으로 맞췄다. windows11 스타일에서는 어긋난다
         hints.colorSchemeChanged.connect(lambda _scheme: _sync())
         _listening = True
