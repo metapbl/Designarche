@@ -1,5 +1,7 @@
 [tool.ruff]
 extend-exclude = ["venv"]
+# 테마 원본은 스킬 폴더 안에 있다 (pytest pythonpath 와 같은 목록)
+src = [".", "designarche/assets"]
 
 [tool.pytest.ini_options]
 pythonpath = [".", "designarche/assets"]

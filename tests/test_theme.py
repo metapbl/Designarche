@@ -56,6 +56,12 @@ def app():
     theme.apply_theme(app, "dark")
 
 
+def _needs_color_scheme(app):
+    # 화면 없는 플랫폼(CI 의 offscreen)은 시스템 색 모드를 보고하지 못한다. 테마 대상 OS 는 Windows·macOS
+    if app.platformName() in ("offscreen", "minimal"):
+        pytest.skip(f"Qt platform '{app.platformName()}' has no system color scheme")
+
+
 def test_themes_have_same_22_names():
     assert theme.TOKENS["dark"].keys() == theme.TOKENS["light"].keys()
     assert len(theme.TOKENS["dark"]) == 22
@@ -134,6 +140,7 @@ def test_switch_repaints_and_notifies_once(app):
 
 
 def test_system_mode_follows_color_scheme_signal(app):
+    _needs_color_scheme(app)
     # setColorScheme 은 Windows 색 모드가 바뀔 때와 같은 colorSchemeChanged 를 낸다
     hints = app.styleHints()
     theme.apply_theme(app, "system")
@@ -151,6 +158,7 @@ def test_fixed_mode_ignores_color_scheme_signal(app):
 
 
 def test_title_bar_scheme_is_requested(app):
+    _needs_color_scheme(app)
     theme.apply_theme(app, "light")
     assert app.styleHints().colorScheme() == Qt.ColorScheme.Light
 
