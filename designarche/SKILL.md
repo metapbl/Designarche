@@ -15,6 +15,7 @@ Speak to the user in their language. Read only the reference files the task need
 | Task | Read |
 |---|---|
 | Any audit, and a last look after any build | [references/slop-signs.md](references/slop-signs.md) and the platform file |
+| A desktop app (Windows, macOS, Linux; any toolkit) | [references/desktop.md](references/desktop.md) |
 | Apply or update the Graphite/Paper theme in a PySide6 (Python) desktop app | [references/pyside6-theme.md](references/pyside6-theme.md) |
 
 Pick the platform the screen runs on. If no file fits exactly, use the closest one and say so in the first line of your reply.
