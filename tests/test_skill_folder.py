@@ -22,6 +22,9 @@ def test_copied_skill_folder_generates_same_theme(tmp_path):
 
     assert result.returncode == 0, result.stderr
     assert _files(app) == _files(_REPO / "tests" / "golden")
+    check = "from ui import theme; print(len(theme.TOKENS['dark']))"
+    out = subprocess.run([sys.executable, "-c", check], check=True, cwd=app, capture_output=True, text=True)
+    assert out.stdout.strip() == "22"
 
 
 # Agent Skills 규격 (https://agentskills.io/specification) 과 D040~D043

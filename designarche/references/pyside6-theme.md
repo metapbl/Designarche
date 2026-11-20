@@ -18,7 +18,7 @@ If the app already has a theme file with `Graphite/Paper` near its first line, g
 
 Look at the app's layout and choose where the theme file and the icon folder go. Follow folders the app already has, such as `ui/` or `assets/`.
 
-```bash
+```text
 python "<skill>/scripts/generate.py" "<app root>" --theme ui/theme.py --icons assets/icons
 ```
 
