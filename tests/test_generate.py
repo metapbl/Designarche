@@ -59,6 +59,17 @@ def test_generated_theme_works_alone(tmp_path, args, module, theme_file, icons):
     assert out["drawn"] and out["exists"]
 
 
+def _files(root: Path) -> dict[str, bytes]:
+    # 줄 끝은 git autocrlf 에 따라 OS 마다 다르므로 LF 로 맞춰 비교한다
+    return {p.relative_to(root).as_posix(): p.read_bytes().replace(b"\r\n", b"\n") for p in root.rglob("*") if p.is_file()}
+
+
+def test_output_matches_golden(tmp_path):
+    # 1.4.3 의 생성 결과를 고정한다. 옮기기·정리 뒤에도 앱에 생기는 파일은 같아야 한다 (PRD F4-2)
+    assert generate(tmp_path).returncode == 0
+    assert _files(tmp_path) == _files(_REPO / "tests" / "golden")
+
+
 def test_existing_files_stop_without_force(tmp_path):
     theme_file = tmp_path / "ui" / "theme.py"
     theme_file.parent.mkdir()
