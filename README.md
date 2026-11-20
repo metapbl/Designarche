@@ -10,10 +10,10 @@ PySide6 + PyInstaller 데스크톱 앱용 다크(Graphite)·라이트(Paper) 테
 
 ## 적용
 
-앱 프로젝트에는 테마 파일 하나와 아이콘 폴더만 생긴다. `graphite_paper/` 는 이 저장소의 원본이고 앱에 들어가지 않는다.
+앱 프로젝트에는 테마 파일 하나와 아이콘 폴더만 생긴다. `designarche/assets/graphite_paper/` 는 이 저장소의 원본이고 앱에 들어가지 않는다.
 
 ```bash
-python skill/generate.py <앱 루트> --theme ui/theme.py --icons assets/icons
+python designarche/scripts/generate.py <앱 루트> --theme ui/theme.py --icons assets/icons
 ```
 
 ```python
@@ -26,14 +26,14 @@ theme.apply_theme(app, "system")  # system(시스템 따라가기) / dark / ligh
 
 색표는 테마 파일 안에 들어가므로 파일은 혼자 동작한다. 이미 있는 파일은 덮어쓰지 않고 멈춘다 (`--force` 로 덮어쓰기).
 
-Claude Code 를 쓰면 `skill/` 의 `graphite-paper-theme` 스킬이 만들기부터 캡처 확인까지 진행한다. 스킬 폴더에서 저장소로 링크를 건다.
+Claude Code 를 쓰면 `designarche/` 스킬이 만들기부터 캡처 확인까지 진행한다. 스킬 폴더에서 저장소로 링크를 건다.
 
 ```powershell
-New-Item -ItemType SymbolicLink -Path "$HOME\.claude\skills\graphite-paper-theme" -Target "<저장소>\skill"
+New-Item -ItemType SymbolicLink -Path "$HOME\.claude\skills\designarche" -Target "<저장소>\designarche"
 ```
 
 ```bash
-ln -s "<저장소>/skill" ~/.claude/skills/graphite-paper-theme
+ln -s "<저장소>/designarche" ~/.claude/skills/designarche
 ```
 
 원격 저장소가 없으므로 Mac 에는 이 폴더(`venv` `shots` `build` `dist` 제외)를 직접 복사한 뒤 링크를 건다.
@@ -104,7 +104,7 @@ btn.setProperty("role", "primary")  # primary / secondary / danger. 없으면 se
 
 진행률 막대는 글자를 숨긴다. 어떤 글자색도 `line2` 와 `accent` 양쪽에서 읽히지 않으므로, 퍼센트는 옆 `QLabel` 에 쓴다.
 
-색을 바꾸려면 `graphite_paper/tokens.json` 만 고친다. `check` `radio` `up` `down` SVG 는 색을 직접 가지므로 `accent` `on_accent` `text2` 를 바꾸면 SVG 도 고친다 (테스트가 불일치를 잡는다).
+색을 바꾸려면 `designarche/assets/graphite_paper/tokens.json` 만 고친다. `check` `radio` `up` `down` SVG 는 색을 직접 가지므로 `accent` `on_accent` `text2` 를 바꾸면 SVG 도 고친다 (테스트가 불일치를 잡는다).
 
 ## PyInstaller
 
@@ -128,7 +128,7 @@ SVG 를 읽는 Qt 플러그인은 PySide6 훅이 함께 묶는다. 스펙에서 
 
 ## 갱신
 
-앱의 테마 파일 머리에 만들 때의 버전이 적혀 있다. 원본의 버전은 `graphite_paper/__init__.py` 의 `__version__` 이다. 새 버전은 `generate.py --force` 로 다시 만들고 앱 화면을 확인한다. 앱에서 테마 파일을 직접 고치면 이때 사라지므로, 앱 고유 규칙은 창 QSS 에 둔다.
+앱의 테마 파일 머리에 만들 때의 버전이 적혀 있다. 원본의 버전은 `designarche/assets/graphite_paper/__init__.py` 의 `__version__` 이다. 새 버전은 `generate.py --force` 로 다시 만들고 앱 화면을 확인한다. 앱에서 테마 파일을 직접 고치면 이때 사라지므로, 앱 고유 규칙은 창 QSS 에 둔다.
 
 
 ## 앱 설정과 연결

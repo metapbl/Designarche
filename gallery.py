@@ -32,6 +32,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+# 테마 원본은 스킬 폴더 안에 있다 (designarche/assets/graphite_paper)
+sys.path.insert(0, str(Path(__file__).resolve().parent / "designarche" / "assets"))
 from graphite_paper import theme
 
 

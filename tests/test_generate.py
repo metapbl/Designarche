@@ -7,7 +7,8 @@ from pathlib import Path
 import pytest
 
 _REPO = Path(__file__).resolve().parent.parent
-_GENERATE = _REPO / "skill" / "generate.py"
+_GENERATE = _REPO / "designarche" / "scripts" / "generate.py"
+_SOURCE = _REPO / "designarche" / "assets" / "graphite_paper"
 _CHECK = """
 import json, sys
 from importlib import import_module
@@ -43,7 +44,7 @@ def test_generated_theme_works_alone(tmp_path, args, module, theme_file, icons):
 
     files = {p.relative_to(project).as_posix() for p in project.rglob("*") if p.is_file()}
     assert theme_file in files
-    assert {p for p in files if p != theme_file} == {f"{icons}/{s.name}" for s in (_REPO / "graphite_paper/icons").iterdir()}
+    assert {p for p in files if p != theme_file} == {f"{icons}/{s.name}" for s in (_SOURCE / "icons").iterdir()}
 
     code = (project / theme_file).read_text(encoding="utf-8")
     assert "graphite_paper" not in code
@@ -55,7 +56,7 @@ def test_generated_theme_works_alone(tmp_path, args, module, theme_file, icons):
     )
     assert result.returncode == 0, result.stderr
     out = json.loads(result.stdout.splitlines()[-1])
-    assert out["tokens"] == json.loads((_REPO / "graphite_paper/tokens.json").read_text(encoding="utf-8"))
+    assert out["tokens"] == json.loads((_SOURCE / "tokens.json").read_text(encoding="utf-8"))
     assert out["drawn"] and out["exists"]
 
 

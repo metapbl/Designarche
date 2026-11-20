@@ -7,7 +7,7 @@ import shutil
 import sys
 from pathlib import Path, PurePosixPath
 
-SOURCE = Path(__file__).resolve().parent.parent / "graphite_paper"
+SOURCE = Path(__file__).resolve().parent.parent / "assets" / "graphite_paper"
 
 
 def relative(value: str) -> PurePosixPath:
