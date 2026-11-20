@@ -71,6 +71,16 @@ def test_output_matches_golden(tmp_path):
     assert _files(tmp_path) == _files(_REPO / "tests" / "golden")
 
 
+def test_generated_theme_type_checks(tmp_path):
+    # 앱에 들어가는 파일이 타입 검사를 통과해야 앱의 pyright 를 깨뜨리지 않는다 (D034)
+    assert generate(tmp_path).returncode == 0
+    result = subprocess.run(
+        [sys.executable, "-m", "pyright", "--pythonpath", sys.executable, str(tmp_path / "ui" / "theme.py")],
+        check=False, capture_output=True, text=True, encoding="utf-8",
+    )
+    assert result.returncode == 0, result.stdout
+
+
 def test_existing_files_stop_without_force(tmp_path):
     theme_file = tmp_path / "ui" / "theme.py"
     theme_file.parent.mkdir()
