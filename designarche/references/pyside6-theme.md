@@ -1,86 +1,83 @@
----
-name: graphite-paper-theme
-description: Applies or updates the Graphite (dark) / Paper (light) theme in a PySide6 desktop app or PyInstaller exe/app project on Windows or macOS. Use when starting a PySide6 app that needs a theme, adding dark/light mode or system color mode following to one, restyling one with this house theme, or updating a theme generated earlier.
----
+# Graphite / Paper theme for PySide6
 
-# Graphite / Paper 테마 적용
+Applies or updates the Graphite (dark) / Paper (light) theme in a PySide6 desktop app or a PyInstaller exe/app project on Windows or macOS.
 
-프로젝트에는 테마 파일 하나(기본 `ui/theme.py`)와 아이콘 폴더(기본 `assets/icons/`)만 생긴다. 앱의 일부로 읽히도록 원본 폴더 이름을 앱에 남기지 않는다.
+The app gets only one theme file (default `ui/theme.py`) and one icon folder (default `assets/icons/`). Nothing in the app names this skill or its source folder, so the files read as part of the app.
 
-원본 저장소는 이 스킬 폴더의 실제 위치(심볼릭 링크를 따라간 경로)의 한 단계 위다. 거기에 `graphite_paper/` 가 없으면 멈추고 사용자에게 경로를 묻는다. 색 이름 규칙, 버튼 역할, 설정 연결 예는 원본의 `README.md` 에 있다. 시작할 때 읽는다.
+Paths below are relative to this skill folder: the generator is `scripts/generate.py`, the theme source is `assets/graphite_paper/`. Write `<skill>` for this skill folder's absolute path when you run a command from the app.
 
-대상은 Python 3.10 이상, PySide6 6.8 이상이다. 다른 GUI 기술이면 멈추고 사용자에게 알린다. 낮은 PySide6 핀을 올려야 하면 올리기 전에 묻는다.
+Targets: Python 3.10 or later, PySide6 6.8 or later. If the app uses another GUI toolkit, stop and tell the user. If a low PySide6 pin has to be raised, ask before raising it.
 
-아래 `python` 은 앱의 가상환경 파이썬이다 (Windows `venv\Scripts\python`, macOS `venv/bin/python`).
+`python` below is the app's virtual-environment Python: `venv\Scripts\python` on Windows, `venv/bin/python` on macOS and Linux.
 
-macOS 절차는 문서 근거로 썼고 실제 Mac 에서 돌려 본 적이 없다. 처음 쓸 때는 5단계 결과를 이 사실과 함께 보고한다.
+The macOS steps come from documentation and have not been run on a real Mac. The first time you use them, report the step 5 results together with that fact.
 
-첫 줄 근처에 `Graphite/Paper 테마` 가 적힌 테마 파일이 앱에 이미 있으면 맨 아래 **갱신** 으로 간다.
+If the app already has a theme file with `Graphite/Paper` near its first line, go to **Update** at the end.
 
-## 1. 만들기
+## 1. Generate
 
-앱 구조를 보고 테마 파일과 아이콘 폴더 위치를 정한다. `ui/` 나 `assets/` 처럼 앱에 이미 있는 폴더를 따른다.
+Look at the app's layout and choose where the theme file and the icon folder go. Follow folders the app already has, such as `ui/` or `assets/`.
 
 ```bash
-python "<원본>/skill/generate.py" "<앱 루트>" --theme ui/theme.py --icons assets/icons
+python "<skill>/scripts/generate.py" "<app root>" --theme ui/theme.py --icons assets/icons
 ```
 
-이미 있는 파일이 있으면 아무것도 쓰지 않고 멈춘다. 그 파일이 앱의 다른 코드면 다른 경로를 고르거나 사용자에게 묻는다.
+If a target file already exists, it writes nothing and stops. If that file is other app code, pick another path or ask the user. `--force` overwrites.
 
-완료: `python -c "from ui import theme; print(len(theme.TOKENS['dark']))"` 가 앱 루트에서 `22` 를 출력한다 (경로를 바꿨으면 import 도 맞춘다).
+Done when: run from the app root, `python -c "from ui import theme; print(len(theme.TOKENS['dark']))"` prints `22` (adjust the import if you changed the path).
 
-## 2. 연결
+## 2. Connect
 
-`QApplication` 을 만든 직후, 창을 만들기 전에 부른다.
+Call it right after creating the `QApplication`, before creating any window.
 
 ```python
 from ui import theme
-theme.apply_theme(app, mode)  # system / dark / light
+theme.apply_theme(app, mode)  # "system" / "dark" / "light"
 ```
 
-- `app.setStyle(...)` 과 직접 만든 `QPalette`, 앱 전체 `app.setStyleSheet` 는 모듈과 충돌하므로 지운다. 앱 고유 규칙이 있었으면 창의 QSS 로 옮긴다.
-- 앱에 설정 저장소가 있으면 거기에 mode 를 저장하고, 없으면 `"system"` 으로 고정하고 사용자에게 알린다.
+- Remove `app.setStyle(...)`, hand-made `QPalette`s and any app-wide `app.setStyleSheet`; they fight the module. Move app-specific rules into the window's own QSS.
+- If the app has a settings store, save `mode` there (see **Settings**). If not, fix it to `"system"` and tell the user.
 
-완료: 앱이 뜨고 콘솔에 `Could not parse stylesheet` 경고가 없다.
+Done when: the app starts and the console shows no `Could not parse stylesheet` warning.
 
-## 3. 직접 쓴 색 옮기기
+## 3. Move hard-coded colors
 
-Grep 도구로 찾는다. 대소문자 무시, `*.py` `*.qss` `*.ui` 대상, 테마 파일 제외. 셸에서 `rg` 로 돌릴 때는 경로 `.` 를 꼭 붙인다 (없으면 표준 입력을 기다린다).
+Search with a regular expression, case-insensitive, over `*.py`, `*.qss` and `*.ui`, excluding the theme file. When running `rg` in a shell, always pass the path `.` (without it, rg waits on standard input).
 
 ```text
 #[0-9a-fA-F]{3,8}\b|(rgba?|hsla?|hsva?)\(|QColor\(|QPalette\b|Qt\.(GlobalColor\.)?[a-zA-Z]*(white|black|red|green|blue|cyan|magenta|yellow|gray)\b|(color|background|border[a-z-]*)\s*:[^;"']*\b(white|black|red|green|blue|cyan|magenta|yellow|orange|purple|pink|brown|gray|grey|silver|navy|teal)\b
 ```
 
-`#123` 같은 이슈 번호도 걸리므로 하나씩 읽고 가른다. 각 자리를 쓰임이 같은 색 이름으로 바꾼다.
+Issue numbers such as `#123` match too, so read each hit. Replace each color with the color name of the same role (**Color names**).
 
-- QSS 문자열은 `@이름` 으로 적고 `theme.qss(...)` 로 감싼다. `QColor` 와 `QPainter` 는 `QColor(theme.color("이름"))`.
-- 자기 색을 칠하는 창·위젯은 칠하는 코드를 메서드로 모으고 그 메서드를 `theme.notifier.changed` 에 연결한다. 커스텀 `paintEvent` 는 `self.update` 를 연결한다. 위젯을 잡은 람다는 그 위젯이 지워진 뒤 전환할 때 `RuntimeError` 를 내므로 메서드로 바꾼다.
-- 공통 스타일과 같은 규칙(버튼, 입력창, 스크롤바 등)은 옮기지 않고 지운다. 강조 버튼은 `setProperty("role", "primary")`, 위험 버튼은 `"danger"`.
-- 목록 행 높이는 공통 스타일이 22px 로 정한다. 앱에 다른 높이가 필요할 때만 창 QSS 의 `::item { height: ...; }` 로 둔다.
-- 글자에는 `text` `text2`, `base` `surface` `raised` 위의 `muted` 를 쓴다. `faint` 와 라이트의 `success` `success2` `warn` 은 일반 글자에서 뺀다.
-- 데이터의 색(차트 계열, 사용자가 고른 색, 로고)은 그대로 두고 목록으로 사용자에게 알린다.
+- In QSS strings write `@name` and wrap the string in `theme.qss(...)`. For `QColor` and `QPainter`, use `QColor(theme.color("name"))`.
+- A window or widget that paints its own colors collects that code in one method and connects the method to `theme.notifier.changed`. A custom `paintEvent` connects `self.update`. A lambda that captures a widget raises `RuntimeError` when the theme changes after the widget is deleted, so use a method.
+- Rules the shared style already covers (buttons, inputs, scroll bars, and so on) are deleted, not moved. Emphasized buttons get `setProperty("role", "primary")`, destructive ones `"danger"` (**Button roles**).
+- The shared style sets list rows to 22 px. Only if the app needs another height, set `::item { height: ...; }` in the window QSS.
+- For text use `text` and `text2`, and `muted` only on `base`, `surface` or `raised`. Keep `faint`, and in light mode `success`, `success2` and `warn`, out of normal text.
+- Leave data colors (chart series, user-picked colors, logos) as they are, and list them for the user.
 
-완료: 검색 결과가 모두 "그대로 둔 색" 목록이거나 색이 아닌 자리다. `theme.qss` `theme.color` 를 부르는 창마다 다시 칠하는 메서드가 `notifier.changed` 에 연결되어 있다.
+Done when: every remaining search hit is in the "left as is" list or is not a color, and every window that calls `theme.qss` or `theme.color` has its repaint method connected to `notifier.changed`.
 
-## 4. 스펙에 넣기
+## 4. Add to the spec
 
-PyInstaller 를 쓰면 `.spec` 의 `Analysis(datas=[...])` 에 아이콘 폴더를 더한다. Windows 와 macOS 가 같고, onedir 와 onefile 도 같다. 양쪽 값은 1단계의 `--icons` 경로다.
+If the app uses PyInstaller, add the icon folder to `Analysis(datas=[...])` in the `.spec`. It is the same on Windows and macOS, for onedir and onefile. Both values are the `--icons` path from step 1.
 
 ```python
 ("assets/icons", "assets/icons"),
 ```
 
-스펙이 없고 사용자가 실행 파일을 원하면 `pyi-makespec --windowed main.py` 로 만든다. macOS 에서는 `--windowed` 가 `.app` 을 만드는 `BUNDLE` 블록을 넣는다. 빌드는 OS 마다 그 OS 에서 한다. `excludes` 에 `qsvg` 나 `PySide6.QtSvg` 가 있으면 뺀다.
+If there is no spec and the user wants an executable, create one with `pyi-makespec --windowed main.py`. On macOS `--windowed` adds the `BUNDLE` block that builds the `.app`. Build on each OS for that OS. If `excludes` lists `qsvg` or `PySide6.QtSvg`, remove it; the SVG plugin draws the check marks.
 
-완료: 스펙에 아이콘 폴더 줄이 있다.
+Done when: the spec has the icon folder line.
 
-## 5. 캡처로 확인
+## 5. Check with screenshots
 
-`app.exec()` 바로 앞에 임시로 넣는다. `window` 는 앱의 주 창 이름으로 바꾼다.
+Insert this temporarily right before `app.exec()`. Replace `window` with the app's main window.
 
 ```python
 import os
-if os.environ.get("THEME_SHOT"):  # 임시: 확인 후 지운다
+if os.environ.get("THEME_SHOT"):  # temporary: remove after checking
     from pathlib import Path
     from PySide6.QtCore import QTimer
     def _shots():
@@ -92,30 +89,101 @@ if os.environ.get("THEME_SHOT"):  # 임시: 확인 후 지운다
     QTimer.singleShot(500, _shots)
 ```
 
-저장 폴더를 만들고 그 절대 경로를 `THEME_SHOT` 에 넣어 소스 실행과 빌드 결과를 각각 돌린다. 스펙이 있으면 `pyinstaller --noconfirm 앱이름.spec` 으로 빌드한다.
+Create an output folder, put its absolute path in the `THEME_SHOT` environment variable, and run both the source and the build. With a spec, build with `pyinstaller --noconfirm <app>.spec`.
 
-- Windows onedir: `dist\앱이름\앱이름.exe`
-- macOS: 터미널에서 `dist/앱이름.app/Contents/MacOS/앱이름` 을 직접 실행한다. Finder 로 띄우면 환경변수가 줄어 캡처가 돌지 않는다.
+- Windows onedir: `dist\<app>\<app>.exe`
+- macOS: run `dist/<app>.app/Contents/MacOS/<app>` directly from a terminal. Launched from Finder, the environment is reduced and the screenshots do not run.
 
-Read 로 PNG 를 열어 두 테마를 눈으로 본다. 체크 표시, 글자와 바탕의 구분, 전환 뒤 옛 테마 색이 남은 곳을 본다. 빌드 결과에서 체크 표시가 비면 아이콘 폴더나 `qsvg` 플러그인이 빠진 것이므로, 빌드 폴더에서 `check_dark.svg` 와 `*qsvg*` 를 찾아 본다. macOS `.app` 안의 데이터 위치는 문서로 확인하지 못했으니 이 실행 결과로 판단한다.
+Open the PNGs and look at both themes: the check marks, text against its background, and any color left over from the previous theme after switching. If the check marks are empty in the build, the icon folder or the `qsvg` plugin is missing; look for `check_dark.svg` and `*qsvg*` in the build folder. Where data files land inside a macOS `.app` was not confirmed from documentation, so judge by this run.
 
-캡처는 주 창 하나만 찍는다. 대화상자, 메뉴, 제목 표시줄은 찍히지 않는다.
+The screenshot covers the main window only. Dialogs, menus and the title bar are not captured.
 
-끝나면 임시 코드를 지우고 **다시 빌드한다**. 그러지 않으면 배포본에 임시 코드가 남는다.
+When done, remove the temporary code and **build again**, or the shipped build keeps it.
 
-완료: 소스와 빌드 결과 양쪽의 두 PNG 를 확인해 사용자에게 보냈고, 앱 코드에 `THEME_SHOT` 이 없으며, 지운 뒤 다시 빌드했다. 찍히지 않은 화면과 돌리지 못한 OS 는 그대로 알린다.
+Done when: you have looked at both PNGs from both the source and the build and sent them to the user, the app code has no `THEME_SHOT`, and you rebuilt after removing it. Say which screens were not captured and which OS was not run.
 
-## 6. 테스트
+## 6. Tests
 
-프로젝트 테스트와 린터를 돌린다. 색 문자열을 단언하던 테스트는 `theme.color(...)` 로 고친다.
+Run the project's tests and linter. Tests that asserted color strings switch to `theme.color(...)`.
 
-완료: 결과를 출력 그대로 보고한다.
+Done when: you report the results as printed.
 
-## 갱신
+## Update
 
-1. 테마 파일 머리의 버전과 원본 `graphite_paper/__init__.py` 의 `__version__` 을 비교한다. 같으면 끝낸다.
-2. 빈 임시 폴더에 앱과 같은 `--theme` `--icons` 로 새 버전을 만들어 앱의 파일과 비교한다. 차이에는 원본의 변경도 섞여 있으니 원본의 `git log` 와 함께 읽는다. 앱에서 직접 고친 부분은 사용자에게 알리고, 앱 고유 규칙은 창 QSS 로 옮긴다.
-3. 앱 루트에 `--force` 로 다시 만든다.
-4. 5·6단계를 돌린다.
+1. Compare the version in the theme file's header with `__version__` in `assets/graphite_paper/__init__.py`. If they match, stop.
+2. Generate the new version into an empty temporary folder with the app's `--theme` and `--icons`, and compare it with the app's files. The difference mixes changes in the theme with edits made in the app; if the skill came from a git repository, read its history alongside. Tell the user about direct edits in the app, and move app-specific rules into window QSS.
+3. Generate again at the app root with `--force`.
+4. Run steps 5 and 6.
 
-완료: 테마 파일 머리의 버전이 원본과 같고, 5·6단계의 완료 조건을 만족한다.
+Done when: the header version matches the source and steps 5 and 6 are done.
+
+## Using colors in window code
+
+Write colors as `@name`, never as values. An unknown name raises `KeyError`. A window that has its own QSS must repaint on a theme change.
+
+```python
+class MyDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+        theme.notifier.changed.connect(self._apply_style)
+        self._apply_style()
+
+    def _apply_style(self):
+        self.setStyleSheet(theme.qss("QLabel#hint { color: @muted; }"))
+```
+
+Connect a method of the window as above; deleting the window also drops the connection. `notifier.changed` fires only when the theme actually changes, not on the first apply or when the same theme is applied again. The shared widget style and the palette are repainted by the module and need no connection.
+
+One color value: `theme.color("accent")`. The current theme name: `theme.current()`.
+
+## Button roles
+
+```python
+btn.setProperty("role", "primary")  # primary / secondary / danger; secondary when unset
+```
+
+If you change the role after the button is shown, also call `btn.style().unpolish(btn); btn.style().polish(btn)`.
+
+- An enabled default button is outlined: `surface` background, a strong `muted` outline and `text` lettering. Only disabled buttons are filled gray (`raised` background, `faint` lettering, `line` outline), following the Windows 11 convention that a gray fill reads as "cannot press". Filled colors are only for `primary`, `danger` and checked toggle buttons (`setCheckable(True)`).
+- Keyboard focus shows as a 2 px ring (`accent` on default buttons, check boxes and radio buttons; `on_accent` on filled buttons). Padding shrinks by the same amount, so the button keeps its size.
+- Buttons, check boxes and radio buttons take focus from Tab only, as on Windows 11 (`apply_theme` changes Qt's default `StrongFocus` to `TabFocus`), so a clicked button keeps no ring. A button that must take focus on click sets a policy other than `StrongFocus` itself, such as `ClickFocus`.
+- Outside dialogs, a focused `QPushButton` also presses on Enter (Qt's default is Space only). Inside dialogs Qt's default-button and `autoDefault` rules apply unchanged.
+- A window's style sheet beats the application style sheet regardless of selector specificity. Restyling `QPushButton` in window QSS also overrides the role buttons, so leave button shapes to the shared style.
+
+## Color names
+
+Contrast follows WCAG; normal text needs at least 4.5:1.
+
+| Name | Use | Keep to |
+|---|---|---|
+| `base` `surface` `raised` | input and list background / window background / headers | |
+| `line` `line2` | weak / strong borders | outlines on a white `surface` (group boxes, cards, lists) use `line2` |
+| `btn` `btn2` | palette Button / scroll bar handle | the shared button QSS no longer uses them |
+| `track` | background of bars the app draws | shared progress and slider grooves use `line2` (light `track` disappears on white) |
+| `sel` | selected list row background | text on it is `text` |
+| `text` `text2` | body / secondary text | on any background |
+| `muted` | descriptions, status text | on `base` `surface` `raised` only, never on `btn` `btn2` |
+| `faint` | disabled text, empty-state hints | **never normal text** (contrast 2.5–3.6) |
+| `accent` `accent2` | emphasis / hover | `accent` text only on `base` `surface` |
+| `on_accent` | text on `accent` `accent2` `danger` | |
+| `danger` | destructive buttons, error text | text only on `base` `surface` |
+| `on_strong` | **large text and icons** on strong colors | never normal text; 3.3–3.4 on dark `danger` `success` |
+| `success` `success2` `warn` | bars, icons, large text | **never normal text in light mode** (2.8–4.4) |
+| `ext` | links, file extensions and similar secondary emphasis | same as `accent` text |
+
+Progress bars hide their text, because no text color reads on both `line2` and `accent`; put the percentage in a `QLabel` next to it.
+
+## Settings
+
+The app chooses where and under which key to store the mode; the module only takes the `mode` string.
+
+```python
+settings = QSettings("MyCompany", "MyApp")
+theme.apply_theme(app, settings.value("theme_mode", "system"))
+
+def on_mode_selected(mode: str) -> None:  # e.g. from radio buttons in a settings window
+    settings.setValue("theme_mode", mode)
+    theme.apply_theme(QApplication.instance(), mode)
+```
+
+Unknown values behave like `"system"`.
