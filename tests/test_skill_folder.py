@@ -72,7 +72,7 @@ def test_skill_folder_has_no_shell_scripts_or_dev_records():
 _PLATFORMS = ["web", "desktop", "mobile", "terminal"]
 _GRADED = re.compile(r"- `(must-fix|should-fix|consider)` \S")
 # 계획 2 의 작업이 그 파일을 쓰면 여기서 지운다. strict 라서 다 쓰고 남겨 두면 실패한다
-_TODO = {"SKILL.md", "mobile", "terminal"}
+_TODO = {"SKILL.md", "terminal"}
 
 
 def _todo(name: str):
