@@ -6,3 +6,12 @@ build/
 dist/
 *.spec
 shots/
+
+# metarche 개발 기록 (D040, D044) — docs/ 는 자기 로컬 git
+docs/
+AGENTS.md
+CLAUDE.md
+.claude/
+.codex/
+.metarche/
+.metarche/.unchecked
