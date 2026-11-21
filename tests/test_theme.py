@@ -56,6 +56,13 @@ def app():
     theme.apply_theme(app, "dark")
 
 
+def _activate(window):
+    # Windows 는 다른 앱이 앞에 있으면 창 활성화를 거부한다. 활성 창이 아니면 Tab·포커스 검사가 의미 없으므로 건너뛴다 (D052)
+    window.activateWindow()
+    if not QTest.qWaitForWindowActive(window):
+        pytest.skip("OS refused to activate the test window (another app is in front)")
+
+
 def _needs_color_scheme(app):
     # 화면 없는 플랫폼(CI 의 offscreen)은 시스템 색 모드를 보고하지 못한다. 테마 대상 OS 는 Windows·macOS
     if app.platformName() in ("offscreen", "minimal"):
@@ -225,7 +232,7 @@ def test_focus_ring_is_two_pixels_and_keeps_size(app, mode, role, ring):
         btn.setProperty("role", role)
         layout.addWidget(btn)
     window.show()
-    window.activateWindow()
+    _activate(window)
     focused.setFocus()
     app.processEvents()
     image = focused.grab().toImage()
@@ -249,7 +256,7 @@ def test_focused_button_has_ring_only(app, mode, role):
         btn.setProperty("role", role)
         layout.addWidget(btn)
     window.show()
-    window.activateWindow()
+    _activate(window)
     start.setFocus()
     app.processEvents()
     QTest.keyClick(start, Qt.Key.Key_Tab)  # Fusion 은 키보드로 옮긴 포커스에만 네모를 그린다
@@ -269,7 +276,7 @@ def test_buttons_take_focus_from_tab_not_click(app, make):
     layout.addWidget(first)
     layout.addWidget(target)
     window.show()
-    window.activateWindow()
+    _activate(window)
     first.setFocus()
     app.processEvents()
     QTest.mouseClick(target, Qt.MouseButton.LeftButton)
@@ -292,7 +299,7 @@ def test_enter_presses_focused_button_outside_dialog(app, key):
     window.setCentralWidget(btn)
     clicks = _clicks(btn)
     window.show()
-    window.activateWindow()
+    _activate(window)
     btn.setFocus()
     app.processEvents()
     QTest.keyClick(btn, key)
@@ -325,7 +332,7 @@ def test_enter_in_dialog_keeps_default_button_rules(app):
         layout.addWidget(btn)
     clicks = {btn.text(): _clicks(btn) for btn in (close, remove, other)}
     dialog.show()
-    dialog.activateWindow()
+    _activate(dialog)
     remove.setFocus()
     app.processEvents()
     QTest.keyClick(remove, Qt.Key.Key_Return)
