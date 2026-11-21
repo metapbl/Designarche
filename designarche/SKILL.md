@@ -18,6 +18,7 @@ Speak to the user in their language. Read only the reference files the task need
 | A website or web app (anything in a browser) | [references/web.md](references/web.md) |
 | A phone or tablet app (iOS, Android, Flutter, React Native) | [references/mobile.md](references/mobile.md) |
 | A desktop app (Windows, macOS, Linux; any toolkit) | [references/desktop.md](references/desktop.md) |
+| A command-line tool or terminal UI (CLI, TUI) | [references/terminal.md](references/terminal.md) |
 | Apply or update the Graphite/Paper theme in a PySide6 (Python) desktop app | [references/pyside6-theme.md](references/pyside6-theme.md) |
 
 Pick the platform the screen runs on. If no file fits exactly, use the closest one and say so in the first line of your reply.
