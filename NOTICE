@@ -1,0 +1,52 @@
+Designarche
+Copyright (c) 2026 metapbl
+Licensed under the MIT License (see LICENSE).
+
+This project was written in its own words. It draws on ideas from the works
+below; no text from them is copied into this repository unless stated.
+
+Agent skills whose ideas informed the principles and slop signs
+----------------------------------------------------------------
+
+unslop
+  by Damir Sokolovsky — https://github.com/heydamir/unslop
+  License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  https://creativecommons.org/licenses/by/4.0/
+  Several slop signs in designarche/references/slop-signs.md and
+  designarche/references/web.md adapt ideas from its list of signs.
+  Changes: rewritten in our own words, regrouped, graded and extended to
+  desktop, mobile and terminal platforms.
+
+Hallmark — https://github.com/nutlope/hallmark — MIT License
+
+Impeccable — https://github.com/pbakaus/impeccable — Apache License 2.0
+
+Taste Skill (design-taste-frontend) — https://github.com/leonxlnx/taste-skill
+  — MIT License
+
+qt-ui-design (The Qt Company) — https://github.com/TheQtCompanyRnD/agent-skills
+  — BSD 3-Clause License
+
+winui-design (Microsoft) — https://github.com/microsoft/winappCli
+  — MIT License
+
+native-feel — https://github.com/yetone/native-feel-skill — MIT License
+
+platform-design-skills — https://github.com/ehmo/platform-design-skills
+  — MIT License
+
+Guidelines referred to (read, not copied)
+-----------------------------------------
+
+Command Line Interface Guidelines — https://clig.dev
+  (CC BY-SA 4.0; linked from designarche/references/terminal.md, content not
+  adapted)
+Apple Human Interface Guidelines
+  — https://developer.apple.com/design/human-interface-guidelines
+Microsoft Windows app design — https://learn.microsoft.com/windows/apps/design
+KDE Human Interface Guidelines — https://develop.kde.org/hig/
+GNOME Human Interface Guidelines — https://developer.gnome.org/hig/
+Android accessibility — https://developer.android.com/guide/topics/ui/accessibility
+W3C Web Content Accessibility Guidelines (WCAG) 2.2
+  — https://www.w3.org/TR/WCAG22/
+Agent Skills specification — https://agentskills.io/specification

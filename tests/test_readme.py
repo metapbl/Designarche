@@ -16,7 +16,7 @@ _SOURCES = ["unslop", "CC BY 4.0", "Hallmark", "Impeccable", "Taste Skill", "qt-
             "native-feel", "platform-design-skills", "clig.dev"]
 _FORBIDDEN = [r"[A-Za-z]:\\Users\\", r"/Users/\w", r"[\w.+-]+@[\w-]+\.[\w.]+", r"\b\d{1,3}(\.\d{1,3}){3}\b"]
 # 계획 3 작업이 파일을 쓰면 여기서 지운다. strict 라서 다 쓰고 남겨 두면 실패한다
-_TODO = {*_READMES, "NOTICE"}
+_TODO = {*_READMES}
 
 
 def _todo(name: str, only_if_missing: bool = False):
