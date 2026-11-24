@@ -54,7 +54,7 @@ Web-specific slop
 
 ## Check
 
-1. Screenshots in light and dark at about 375, 768, 1280 and 1920 px wide.
+1. Screenshots in every color mode the site has (light and dark, or the only one) at about 360, 768, 1280 and 1920 px wide.
    - If you have a browser tool, open the page there, switch the color scheme (emulate `prefers-color-scheme`) and capture each width.
    - If you do not, ask the user for those screenshots, or run the project's own end-to-end screenshot tests if it has them.
 2. Contrast for each text color on its background with `python scripts/contrast.py <text> <background>`, using the token values.

@@ -47,7 +47,7 @@ Web or wrong-platform habits
 
 ## Check
 
-1. Screenshots of the key screens in light and dark, on a phone size and, if the app supports it, a tablet size.
+1. Screenshots of the key screens in every appearance the app supports (light and dark, or the only one), on a phone size and, if the app supports it, a tablet size.
    - If you can run a simulator or emulator, capture from it (Xcode's simulator, the Android emulator, or the framework's test screenshot tooling).
    - If you cannot, ask the user for those screenshots, and judge the rest from the code.
 2. Contrast for each text color on its background with `python scripts/contrast.py <text> <background>`, in both appearances.

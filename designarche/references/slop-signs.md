@@ -20,6 +20,8 @@ Color and surfaces
 - `should-fix` Colored glows, neon outlines or blurred color clouds behind content — Instead: show depth with surface steps and thin, low-contrast borders.
 - `should-fix` Highlights on so many elements that none of them leads — Instead: spend the accent on one or two things per screen.
 - `should-fix` Text set in several almost-identical shades of one color — Instead: two or three text roles taken from one neutral scale.
+- `should-fix` Colored chrome competing with colorful content (photos, maps, charts, user media) — Instead: keep the chrome around colorful content neutral.
+- `should-fix` An accent that changes from screen to screen, or, with no brand color, a made-up accent instead of the system accent — Instead: one fixed brand accent; without a brand, the system accent.
 - `should-fix` Raw color values inside components instead of role names — Instead: role tokens (text, surface, accent, danger) defined in one place.
 
 Type
@@ -64,4 +66,4 @@ Template look
 
 ---
 
-Several signs above draw on ideas from unslop by Damir Sokolovsky (CC BY 4.0) and Hallmark (MIT), rewritten in our own words. Full credits are in the repository's NOTICE file.
+Several signs above draw on ideas from unslop by Damir Sokolovsky (CC BY 4.0) and Hallmark (MIT), rewritten in our own words.

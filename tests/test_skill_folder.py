@@ -71,15 +71,6 @@ def test_skill_folder_has_no_shell_scripts_or_dev_records():
 # 원칙·플랫폼 규칙·징후·검사 (PRD F1~F3, D013, D026, D027)
 _PLATFORMS = ["web", "desktop", "mobile", "terminal"]
 _GRADED = re.compile(r"- `(must-fix|should-fix|consider)` \S")
-# 계획 2 의 작업이 그 파일을 쓰면 여기서 지운다. strict 라서 다 쓰고 남겨 두면 실패한다
-_TODO: set[str] = set()
-
-
-def _todo(name: str):
-    mark = pytest.mark.xfail(strict=True, reason="계획 2 작업 3~8 에서 씀")
-    return pytest.param(name, marks=mark) if name in _TODO else name
-
-
 def _section(text: str, title: str) -> list[str]:
     lines = text.splitlines()
     start = lines.index(f"## {title}") + 1
@@ -87,21 +78,21 @@ def _section(text: str, title: str) -> list[str]:
     return lines[start:end]
 
 
-@pytest.mark.parametrize("name", [_todo("SKILL.md")])
+@pytest.mark.parametrize("name", ["SKILL.md"])
 def test_skill_md_routes_to_every_platform_file(name):
     skill = (_SKILL / name).read_text(encoding="utf-8")
     for ref in [*_PLATFORMS, "slop-signs"]:
         assert f"(references/{ref}.md)" in skill, ref
 
 
-@pytest.mark.parametrize("name", [_todo(n) for n in _PLATFORMS])
+@pytest.mark.parametrize("name", _PLATFORMS)
 def test_platform_file_has_rules_signs_and_checks(name):
     text = (_SKILL / "references" / f"{name}.md").read_text(encoding="utf-8")
     for title in ("Rules", "Slop signs", "Check"):
         assert _section(text, title), title
 
 
-@pytest.mark.parametrize("name", [_todo(n) for n in [*_PLATFORMS, "slop-signs"]])
+@pytest.mark.parametrize("name", [*_PLATFORMS, "slop-signs"])
 def test_every_slop_sign_has_a_grade(name):
     text = (_SKILL / "references" / f"{name}.md").read_text(encoding="utf-8")
     items = [line for line in _section(text, "Slop signs") if line.startswith("- ")]

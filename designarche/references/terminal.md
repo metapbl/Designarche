@@ -52,7 +52,7 @@ Decoration and chatter
 
 1. Run the common commands in a real terminal and capture the output as text (and as screenshots for a TUI) on a dark and a light terminal theme.
    - If you cannot run the program, ask the user for the output or screenshots, and judge the rest from the code.
-2. Pipe the output to a file (`> out.txt`) and with `NO_COLOR=1` set: no color codes, no spinners, the result unchanged.
+2. Redirect the output to a file, and run again with the `NO_COLOR` environment variable set to `1`: no color codes, no spinners, the result unchanged.
 3. Run with `--help`, with a wrong argument and with a missing file: the help reads well, errors are plain, exit codes are non-zero on failure.
 4. For a TUI, run at 80 × 24 and in a narrower window; check key hints, quitting and that the terminal is restored after exit.
 5. If you have screenshots, measure the main text and accent colors against the background with `python scripts/contrast.py <text> <background>`.
