@@ -9,7 +9,7 @@ Facts and content
 - `must-fix` Placeholder data that looks real (`$123,456`, `John Doe`, lorem ipsum in a shipped screen) — Instead: real sample data from the product, or an honest empty state.
 
 Accessibility
-- `must-fix` Normal text under 4.5:1 against its background, or large text, icons and control edges under 3:1 — Instead: pick role colors that pass; measure with `scripts/contrast.py`.
+- `must-fix` Normal text under 4.5:1 against its background, or large text, meaningful icons, or a control boundary that is the only way to recognize the control under 3:1 — Instead: pick role colors that pass; measure with `scripts/contrast.py`.
 - `must-fix` Keyboard focus that is invisible or missing on something you can operate — Instead: a visible focus indicator on every interactive element, as the platform draws it.
 - `must-fix` Color as the only signal (red/green status with no text, icon or shape) — Instead: add a label, icon or pattern.
 - `must-fix` Motion that cannot be reduced, or content that only appears through animation — Instead: honor the system's reduce-motion setting and keep content visible without it.
@@ -30,7 +30,7 @@ Type
 - `should-fix` One italic word for emphasis inside a heading — Instead: plain text; emphasis through placement or weight.
 
 Icons
-- `should-fix` Emoji used as icons, status or decoration (🚀 🔥 📈 ✅) — Instead: one icon set from the platform, or no icon.
+- `should-fix` Color emoji used as icons, status or decoration (🚀 🔥 📈 ✅) — Instead: one icon set from the platform, or no icon. Single-color text symbols (✓ ⚠ ×) are fine for status when they follow the text color roles.
 - `should-fix` A sparkle ✨ on anything to do with AI — Instead: a plain icon only where it explains something, or none.
 - `should-fix` Icons in mixed sizes, strokes and colors — Instead: one size, one stroke, the text role color.
 

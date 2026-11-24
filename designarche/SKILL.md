@@ -30,6 +30,7 @@ These hold on every platform. The platform file gives the concrete values.
 - **Follow the platform first.** Use the platform's own controls, spacing, type and behavior before any style of your own.
 - **Colors only through role names.** Components refer to roles such as text, surface, accent and danger, never to raw color values. How the roles are stored follows the stack's own way (CSS variables, a theme object, a token file).
 - **Chrome color follows the content.** If the content is colorful (photos, video, charts, user media), keep the surrounding chrome neutral. If the content is mostly text or monochrome, the brand color may tint the accent and the shell.
+- **Content keeps its own colors.** Maps, photos, video and charts are judged as content, not as UI. Only the UI drawn on top of them (labels, buttons, pins, overlays) must use role colors and meet the contrast rules against what lies beneath.
 - **Accent color.** Use a fixed brand accent by default. Following the system accent color is an option the product may offer. Without a brand color, use the system accent.
 - **Hover and cursor.** Do what the platform's standard controls do. The same hover effect on every control is a slop sign.
 
@@ -58,7 +59,8 @@ A screen passes when it has no `must-fix` left.
 
 1. Read [the platform file](#which-file-to-read) for the screen. Look at the code and, when you can, at screenshots of the running screen.
 2. List every finding with its location (`file:line`, or the screen area), its grade and what to do instead.
-3. **Stop.** Change nothing until the user answers.
+3. **Stop.** Change nothing until the user answers. The question goes to the person using this session, even when another session or tool asked for the audit; send the requester only the results.
+   - If the user wants to see a change before choosing, show a before/after preview (screenshots, or a temporary toggle that is removed afterwards) and still change nothing until they choose.
 4. If the screen is nearly clean (no `must-fix` and at most two `should-fix`), say that no problems were found, give two or three suggestions, and change nothing.
 5. Fix only the items the user approved: `must-fix` first, then `should-fix`. Fix `consider` items only when the user picked them. Report each item as fixed or failed, with the reason for a failure.
 6. Run **Check**.
@@ -68,10 +70,10 @@ A screen passes when it has no `must-fix` left.
 Run after a build or a fix.
 
 1. Take screenshots of every color mode the app has (dark and light, or the only one it has), as the platform file's Check section describes.
-2. Measure contrast for each text color on its background with `python scripts/contrast.py <text color> <background color>` (paths are relative to this skill folder). Normal text needs 4.5:1; large text, icons and control boundaries need 3:1.
+2. Measure contrast for each text color on its background with `python scripts/contrast.py <text color> <background color>` (paths are relative to this skill folder). Normal text needs 4.5:1; large text and meaningful icons need 3:1, and so does a control's boundary when that boundary is what makes the control recognizable.
 3. Go through the platform file's Check list.
-4. The result passes when no `must-fix` is left. Otherwise list what remains, and ask before fixing again; do not loop on your own.
-5. If a check could not run (no screenshot tool, no display, a platform you cannot run), do not report a pass. Say what was not checked.
+4. The result passes when no `must-fix` is left. Otherwise list what remains, including new `must-fix` findings the check uncovered, and ask before fixing again; fix only what the user approves and run Check once more. Do not loop on your own.
+5. If a check could not run (no screenshot tool, no display, a platform you cannot run), do not report a pass for it. You may review the code instead (for example the reduced-motion rules or the tab order), but say that it was reviewed, not run, and list everything that was not checked.
 6. Screenshots may show real user data. Keep them out of version control and tell the user so.
 
 ## Ground rules

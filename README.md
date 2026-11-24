@@ -90,7 +90,7 @@ btn.setProperty("role", "primary")  # primary / secondary / danger. 없으면 se
 | `sel` | 목록 선택 행 바탕 | 위 글자는 `text` |
 | `text` `text2` | 본문 / 보조 글자 | 어느 바탕에서나 가능 |
 | `muted` | 설명·상태 글자 | `base` `surface` `raised` 위에 쓴다. `btn` `btn2` 위에는 쓰지 않는다 |
-| `faint` | 비활성 글자, 빈 화면 안내 | **일반 글자 금지** (대비 2.5~3.6) |
+| `faint` | 비활성 글자만 | **일반 글자 금지** (대비 2.5~3.6). 빈 화면 안내 글자는 `muted` |
 | `accent` `accent2` | 강조 / hover | `accent` 글자는 `base` `surface` 위만 |
 | `on_accent` | `accent` `accent2` `danger` 위 글자 | |
 | `danger` | 위험 버튼, 오류 글자 | 글자는 `base` `surface` 위만 |

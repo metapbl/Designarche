@@ -20,7 +20,7 @@ Spacing (use named steps, never one-off values)
 
 Type
 - Use the system font and the platform's type ramp: Segoe UI Variable on Windows (body 14 / 20 line), the system font on macOS (body 13 pt, nothing under 10 pt), the desktop font on Linux.
-- Follow the user's text-size setting; do not hard-code sizes that ignore it.
+- Text must follow the system text-size setting. Whether a unit does this depends on the toolkit (some ignore the setting even in points), so check by raising the setting and reopening the app.
 - GNOME: no italics and no all-caps for UI text.
 
 Shape and color
@@ -45,7 +45,7 @@ Pointer and keyboard
 
 Platform and accessibility
 - `must-fix` A control or action that cannot be reached or used from the keyboard — Instead: standard controls with a working Tab order and the platform's shortcuts.
-- `must-fix` Text sizes fixed in pixels so the system text-size setting has no effect — Instead: sizes from the platform's type ramp that scale with the setting.
+- `must-fix` Text that does not grow when the system text-size setting is raised — Instead: the toolkit's way of following the setting; if the toolkit cannot, report that instead of claiming a fix.
 - `must-fix` The app ignores high-contrast mode, leaving text or controls invisible — Instead: system colors or theme roles that switch with high contrast.
 - `must-fix` Text input that breaks input-method composition (Korean, Japanese, Chinese) — Instead: the toolkit's standard text fields, tested with an IME.
 

@@ -163,7 +163,7 @@ Contrast follows WCAG; normal text needs at least 4.5:1.
 | `sel` | selected list row background | text on it is `text` |
 | `text` `text2` | body / secondary text | on any background |
 | `muted` | descriptions, status text | on `base` `surface` `raised` only, never on `btn` `btn2` |
-| `faint` | disabled text, empty-state hints | **never normal text** (contrast 2.5–3.6) |
+| `faint` | disabled text only | **never normal text** (contrast 2.5–3.6); empty-state hints use `muted` |
 | `accent` `accent2` | emphasis / hover | `accent` text only on `base` `surface` |
 | `on_accent` | text on `accent` `accent2` `danger` | |
 | `danger` | destructive buttons, error text | text only on `base` `surface` |

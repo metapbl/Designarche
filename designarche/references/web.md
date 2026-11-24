@@ -23,7 +23,7 @@ Type
 Interaction
 - Every interactive element shows `:focus-visible` immediately. Do not remove outlines without a replacement.
 - Hover changes color or surface; pressing may scale down slightly. No lift-and-glow on every card.
-- Touch targets at least 44 × 44 px on touch screens.
+- Touch targets at least 44 × 44 px on touch screens. Enlarging the hit area with a pseudo-element fails inside a scrolling or clipped container; size the element itself there.
 - Forms: visible labels (not placeholder-only), errors next to the field in words, the submit button says what it does.
 
 Motion
@@ -59,7 +59,7 @@ Web-specific slop
    - If you do not, ask the user for those screenshots, or run the project's own end-to-end screenshot tests if it has them.
 2. Contrast for each text color on its background with `python scripts/contrast.py <text> <background>`, using the token values.
 3. Keyboard pass: Tab through the page; every control is reachable, its focus is visible, and Enter/Space work. Esc closes dialogs and menus.
-4. Reduced motion: with reduced motion on, nothing important moves or is hidden.
+4. Reduced motion: with reduced motion on, nothing important moves or is hidden. If your tool cannot emulate the setting, review the `prefers-reduced-motion` rules and the animated properties in the code, and say it was reviewed, not run.
 5. At 360 px nothing scrolls sideways; at 1920 px the content stays capped.
 6. Walk the Slop signs above and in slop-signs.md against the screenshots and the code.
 7. Optional automated checks: an axe-based accessibility scan or a Lighthouse accessibility audit, if the project already has them. Report which ran.
