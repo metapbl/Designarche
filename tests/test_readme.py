@@ -16,7 +16,7 @@ _SOURCES = ["unslop", "CC BY 4.0", "Hallmark", "Impeccable", "Taste Skill", "qt-
             "native-feel", "platform-design-skills", "clig.dev"]
 _FORBIDDEN = [r"[A-Za-z]:\\Users\\", r"/Users/\w", r"[\w.+-]+@[\w-]+\.[\w.]+", r"\b\d{1,3}(\.\d{1,3}){3}\b"]
 # 계획 3 작업이 파일을 쓰면 여기서 지운다. strict 라서 다 쓰고 남겨 두면 실패한다
-_TODO = {*_READMES}
+_TODO = set(_READMES[1:])
 
 
 def _todo(name: str, only_if_missing: bool = False):
@@ -51,7 +51,8 @@ def test_translation_has_notice_and_same_shape(name):
 def test_relative_links_point_to_files(name):
     text = _read(name)
     targets = re.findall(r'\]\(([^)\s#]+)', text) + re.findall(r'(?:href|src)="([^"#]+)"', text)
-    missing = [t for t in targets if "://" not in t and not (_REPO / t).exists()]
+    # 아직 안 쓴 번역(_TODO)을 가리키는 링크는 그 번역을 쓸 때까지 봐준다
+    missing = [t for t in targets if "://" not in t and t not in _TODO and not (_REPO / t).exists()]
     assert missing == []
 
 
