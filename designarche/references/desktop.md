@@ -20,7 +20,7 @@ Spacing (use named steps, never one-off values)
 
 Type
 - Use the system font and the platform's type ramp: Segoe UI Variable on Windows (body 14 / 20 line), the system font on macOS (body 13 pt, nothing under 10 pt), the desktop font on Linux.
-- Text must follow the system text-size setting. Whether a unit does this depends on the toolkit (some ignore the setting even in points), so check by raising the setting and reopening the app.
+- Text must grow with display scaling, and should follow the system text-size setting where the toolkit supports it (for example the GNOME text scaling factor in GTK apps). Many Windows toolkits (Qt, Electron, classic Win32) follow display scaling but not the Windows "Text size" setting; say so instead of claiming a fix. Whether a unit works depends on the toolkit (some ignore the setting even in points), so check by raising the setting and reopening the app.
 - GNOME: no italics and no all-caps for UI text.
 
 Shape and color
@@ -45,7 +45,8 @@ Pointer and keyboard
 
 Platform and accessibility
 - `must-fix` A control or action that cannot be reached or used from the keyboard — Instead: standard controls with a working Tab order and the platform's shortcuts.
-- `must-fix` Text that does not grow when the system text-size setting is raised — Instead: the toolkit's way of following the setting; if the toolkit cannot, report that instead of claiming a fix.
+- `must-fix` Text that cannot be enlarged at all: it ignores display scaling and the app has no zoom of its own — Instead: sizes that follow display scaling, or an app zoom.
+- `should-fix` Text that ignores a system text-size setting the toolkit supports — Instead: the toolkit's way of following it; if the toolkit cannot, report that instead of claiming a fix.
 - `must-fix` The app ignores high-contrast mode, leaving text or controls invisible — Instead: system colors or theme roles that switch with high contrast.
 - `must-fix` Text input that breaks input-method composition (Korean, Japanese, Chinese) — Instead: the toolkit's standard text fields, tested with an IME.
 
@@ -75,7 +76,7 @@ Generic look
    - Other toolkits: the toolkit's own widget-grab or test screenshot feature, or the OS screenshot tool. If you cannot run the app, ask the user for screenshots of each mode.
 2. Contrast for each text role on each surface with `python scripts/contrast.py <text> <background>`.
 3. Keyboard pass: reach and use every control with Tab, Shift+Tab, Enter, Space and Esc; check menus and shortcuts.
-4. Open the app at a larger system text size and in high-contrast mode (Windows) if the platform has it; nothing may be cut off or invisible.
+4. Open the app at a larger display scaling, at a larger system text size where the toolkit supports it, and in high-contrast mode (Windows) if the platform has it; nothing may be cut off or invisible.
 5. Walk the Slop signs above and in slop-signs.md against the screenshots and the code.
 6. Optional automated accessibility checkers: Accessibility Insights / Axe.Windows (Windows), the Xcode accessibility audit (macOS), Accerciser (Linux). Report which ones ran.
 7. Say which OS you actually ran. Do not claim a pass for an OS you did not run.

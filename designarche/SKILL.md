@@ -40,7 +40,7 @@ Every finding gets one grade.
 
 | Grade | Meaning |
 |---|---|
-| `must-fix` | Fails accessibility, breaks platform behavior people rely on (keyboard use, the back gesture, system settings such as text size or high contrast, safe areas), or shows invented facts (fake numbers, testimonials, logos, features) |
+| `must-fix` | Fails accessibility, breaks platform behavior people rely on (keyboard use, the back gesture, system settings that apps on that platform normally follow, such as text size on phones or high contrast, safe areas), or shows invented facts (fake numbers, testimonials, logos, features) |
 | `should-fix` | A slop sign: a generic, machine-made pattern, or a look that departs from the platform's conventions, that has a better, specific alternative |
 | `consider` | An improvement suggestion |
 
