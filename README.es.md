@@ -73,6 +73,26 @@ Pide las cosas con tus propias palabras; el agente usa la skill según la petici
 
 Si quieres que el agente no haga preguntas, dilo desde el principio ("hazlo y ya"); indicará en su primera línea lo que supuso.
 
+## Ejemplo: auditoría de una app real
+
+En Claude Code, la skill auditó la ventana principal de [AVD](https://github.com/metapbl/AVD), un descargador de vídeo en PySide6. Mostró siete hallazgos, se detuvo y los corrigió después de que el autor los aprobara:
+
+| Grado | Hallazgo | Corrección |
+|---|---|---|
+| `must-fix` | Texto de "Hecho" y de aviso en el tema claro a 3,23:1 y 4,29:1 | Texto en el color normal; verde y ámbar solo en las marcas ✓ y ⚠ |
+| `must-fix` | Aviso de lista vacía a 3,3:1 | Un color de texto secundario más oscuro (4,8:1 o más) |
+| `must-fix` | Tamaños de letra fijos en px, que ignoran el tamaño de texto del sistema | Tamaños en pt, que siguen la escala de pantalla. **Sigue abierto:** con el tamaño de texto de Windows al 150 % el texto no crece. Después se acotó la regla y ahora cuenta como `should-fix` |
+| `should-fix` | Símbolos delante de las etiquetas de los botones (+ ⚙ ⓘ 📂 ▶) | Solo texto |
+| `should-fix` | No recuerda el tamaño ni la posición de la ventana | Se guardan y se restauran |
+| `consider` | Línea de información que empieza por "•" cuando falta el autor | La línea empieza por la duración |
+| `consider` | Hover rojo en Vaciar lista, Cancelar y ✕ | El estilo de hover común |
+
+Tras las correcciones, la comprobación tomó capturas en modo oscuro y claro y volvió a medir el contraste; no quedó ningún `must-fix` en lo que midió. También avisó de que no había probado el ajuste de tamaño de texto del sistema. Al probarlo a mano más tarde, el hallazgo del tamaño de letra seguía sin resolver; por eso la skill nunca da por superada una comprobación que no ejecutó.
+
+| Antes | Después |
+|---|---|
+| <img src="images/audit-avd-before.png" alt="Ventana principal de AVD antes de la auditoría: símbolos en los botones, líneas de información que empiezan por un punto, texto Hecho en verde claro"> | <img src="images/audit-avd-after.png" alt="Ventana principal de AVD después de la auditoría: botones solo con texto, solo la duración en la línea de información, Hecho en texto normal tras una marca verde"> |
+
 ## El tema de PySide6
 
 Graphite (oscuro) y Paper (claro) es un tema para apps de escritorio con PySide6 y compilaciones con PyInstaller en Windows y macOS. Necesita Python 3.10+ y PySide6 6.8+. El generador copia en tu app un solo archivo de tema y una carpeta de iconos; nada más de este repositorio entra en la app.

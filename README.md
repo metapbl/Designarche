@@ -71,6 +71,26 @@ Ask in your own words; the agent picks the skill up from the request. For exampl
 
 If you want the agent to skip its questions, say so up front ("just do it"); it will state what it assumed in its first line.
 
+## Example: an audit of a real app
+
+The skill audited the main window of [AVD](https://github.com/metapbl/AVD), a PySide6 video downloader, in Claude Code. It listed seven findings, stopped, and fixed them after the owner approved:
+
+| Grade | Finding | Fix |
+|---|---|---|
+| `must-fix` | "Done" and warning text in the light theme at 3.23:1 and 4.29:1 | Text in the normal text color; green and amber only on the ✓ and ⚠ marks |
+| `must-fix` | Empty-list hint at 3.3:1 | A darker secondary text color (4.8:1 or more) |
+| `must-fix` | Font sizes fixed in px, which ignore the system text size | Sizes in pt, which follow display scaling. **Still open:** at 150% Windows text size the text does not grow. The rule was later narrowed, and this now counts as `should-fix` |
+| `should-fix` | Symbols in front of button labels (+ ⚙ ⓘ 📂 ▶) | Plain labels |
+| `should-fix` | Window size and position not remembered | Saved and restored |
+| `consider` | Info line starting with "•" when the uploader is missing | The line starts with the duration |
+| `consider` | Red hover on Clear list, Cancel and ✕ | The shared hover style |
+
+After the fixes, the check took dark and light screenshots and measured contrast again; no `must-fix` was left in what it measured. It also reported that it had not tried the system text-size setting. Trying it by hand later showed the font-size finding was not solved, which is why the skill never reports a check it did not run as passed.
+
+| Before | After |
+|---|---|
+| <img src="images/audit-avd-before.png" alt="AVD main window before the audit: symbols on the buttons, info lines starting with a dot, light green Done text"> | <img src="images/audit-avd-after.png" alt="AVD main window after the audit: plain button labels, the duration alone on the info line, Done in normal text after a green check mark"> |
+
 ## The PySide6 theme
 
 Graphite (dark) and Paper (light) is a theme for PySide6 desktop apps and PyInstaller builds on Windows and macOS. It needs Python 3.10+ and PySide6 6.8+. The generator copies one theme file and an icon folder into your app; nothing else from this repository goes into the app.
