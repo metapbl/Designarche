@@ -87,6 +87,8 @@ Graphite (dark) and Paper (light) is a theme for PySide6 desktop apps and PyInst
 python designarche/scripts/generate.py <app root> --theme ui/theme.py --icons assets/icons
 ```
 
+It prints the theme file path and the icon folder with the number of icons copied. If either already exists, it lists the files and stops; add `--force` to overwrite them.
+
 ```python
 from PySide6.QtWidgets import QApplication
 from ui import theme
@@ -120,9 +122,13 @@ The tests cover the theme (contrast, icons, switching), the generator, the contr
 
 Questions and bug reports go to the GitHub issues of this repository. When you report a problem with a rule or a slop sign, include the platform, the screen and what you expected.
 
+Pull requests are welcome for rule fixes, new slop signs with a source, and translations. Keep each one to a single change, and run the tests and lint from [Development](#development) before you open it.
+
 ## Security
 
 The skill installs no hooks and runs nothing by itself. Its scripts run only when the agent or you call them, write only inside the project folder you name (absolute paths and `..` are refused, existing files are kept unless you pass `--force`) and make no network connections.
+
+To report a vulnerability, use **Report a vulnerability** on this repository's Security tab instead of a public issue.
 
 ## License
 

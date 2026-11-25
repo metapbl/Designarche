@@ -89,6 +89,8 @@ Graphite (oscuro) y Paper (claro) es un tema para apps de escritorio con PySide6
 python designarche/scripts/generate.py <app root> --theme ui/theme.py --icons assets/icons
 ```
 
+Muestra la ruta del archivo de tema y la carpeta de iconos con el número de iconos copiados. Si alguno ya existe, enumera los archivos y se detiene; añade `--force` para sobrescribirlos.
+
 ```python
 from PySide6.QtWidgets import QApplication
 from ui import theme
@@ -122,9 +124,13 @@ Las pruebas cubren el tema (contraste, iconos, cambio de modo), el generador, el
 
 Las preguntas y los informes de errores van a las issues de GitHub de este repositorio. Si informas de un problema con una regla o una señal de slop, indica la plataforma, la pantalla y lo que esperabas.
 
+Se aceptan pull requests con correcciones de reglas, nuevas señales de slop con su fuente y traducciones. Limita cada una a un solo cambio y ejecuta las pruebas y el lint de [Desarrollo](#desarrollo) antes de abrirla.
+
 ## Seguridad
 
 La skill no instala hooks ni ejecuta nada por sí misma. Sus scripts se ejecutan solo cuando el agente o tú los llamáis, escriben solo dentro de la carpeta del proyecto que indicas (rechazan rutas absolutas y `..`, y conservan los archivos existentes salvo que pases `--force`) y no se conectan a la red.
+
+Para informar de una vulnerabilidad, usa **Report a vulnerability** en la pestaña Security de este repositorio en lugar de una issue pública.
 
 ## Licencia
 

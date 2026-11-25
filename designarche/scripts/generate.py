@@ -13,7 +13,7 @@ SOURCE = Path(__file__).resolve().parent.parent / "assets" / "graphite_paper"
 def relative(value: str) -> PurePosixPath:
     path = PurePosixPath(value.replace("\\", "/"))
     if path.is_absolute() or ":" in value or ".." in path.parts:
-        sys.exit(f"프로젝트 안의 상대 경로여야 합니다: {value}")
+        sys.exit(f"Must be a relative path inside the project: {value}")
     return path
 
 
@@ -48,9 +48,9 @@ def main() -> None:
         stream.reconfigure(errors="backslashreplace")  # type: ignore[union-attr]
     parser = argparse.ArgumentParser()
     parser.add_argument("project", type=Path)
-    parser.add_argument("--theme", default="ui/theme.py", help="만들 테마 파일 (프로젝트 기준)")
-    parser.add_argument("--icons", default="assets/icons", help="아이콘 폴더 (프로젝트 기준)")
-    parser.add_argument("--force", action="store_true", help="이미 있는 파일을 덮어쓴다")
+    parser.add_argument("--theme", default="ui/theme.py", help="theme file to create, relative to the project")
+    parser.add_argument("--icons", default="assets/icons", help="icon folder, relative to the project")
+    parser.add_argument("--force", action="store_true", help="overwrite files that already exist")
     args = parser.parse_args()
 
     theme, icons = relative(args.theme), relative(args.icons)

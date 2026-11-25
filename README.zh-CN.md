@@ -89,6 +89,8 @@ Graphite（深色）和 Paper（浅色）是给 Windows 和 macOS 上的 PySide6
 python designarche/scripts/generate.py <app root> --theme ui/theme.py --icons assets/icons
 ```
 
+它会输出主题文件路径，以及图标文件夹和复制的图标数量。如果其中任一已存在，它会列出这些文件并停止；要覆盖请加 `--force`。
+
 ```python
 from PySide6.QtWidgets import QApplication
 from ui import theme
@@ -122,9 +124,13 @@ venv/bin/python gallery.py dark
 
 问题和缺陷报告请提交到本仓库的 GitHub issues。如果是某条规则或某个套路特征有问题，请写明平台、界面和你期望的结果。
 
+欢迎通过拉取请求提交规则修正、附带出处的新套路特征和翻译。每个请求只包含一项改动，提交前请运行[开发](#开发)中的测试和 lint。
+
 ## 安全
 
 技能不安装任何钩子，也不会自行运行任何东西。脚本只在助手或你调用时运行，只写入你指定的项目文件夹（拒绝绝对路径和 `..`，不加 `--force` 不会覆盖已有文件），且不进行任何网络连接。
+
+如需报告漏洞，请使用本仓库 Security 标签页中的 **Report a vulnerability**，不要提交公开 issue。
 
 ## 许可证
 

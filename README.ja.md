@@ -89,6 +89,8 @@ Graphite（ダーク）と Paper（ライト）は、Windows と macOS の PySid
 python designarche/scripts/generate.py <app root> --theme ui/theme.py --icons assets/icons
 ```
 
+テーマファイルのパスと、コピーしたアイコン数つきのアイコンフォルダーを出力します。どちらかが既にあればそのファイルを一覧にして止まります。上書きするには `--force` を付けてください。
+
 ```python
 from PySide6.QtWidgets import QApplication
 from ui import theme
@@ -122,9 +124,13 @@ venv/bin/python gallery.py dark
 
 質問やバグ報告はこのリポジトリの GitHub issues へどうぞ。ルールやスロップの兆候に問題があるときは、プラットフォーム、画面、期待した結果を書いてください。
 
+ルールの修正、出典のある新しいスロップの兆候、翻訳はプルリクエストで受け付けます。1 つのプルリクエストには 1 つの変更だけを入れ、出す前に[開発](#開発)のテストとリントを実行してください。
+
 ## セキュリティ
 
 スキルはフックをインストールせず、自分では何も実行しません。スクリプトはエージェントかあなたが呼んだときだけ動き、指定したプロジェクトフォルダーの中にだけ書き込みます（絶対パスと `..` は拒否し、`--force` なしでは既存ファイルを上書きしません）。ネットワークには接続しません。
+
+脆弱性は公開 issue ではなく、このリポジトリの Security タブにある **Report a vulnerability** から報告してください。
 
 ## ライセンス
 

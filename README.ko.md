@@ -89,6 +89,8 @@ Graphite(다크)와 Paper(라이트)는 Windows와 macOS의 PySide6 데스크톱
 python designarche/scripts/generate.py <app root> --theme ui/theme.py --icons assets/icons
 ```
 
+테마 파일 경로와, 복사한 아이콘 수를 붙인 아이콘 폴더를 출력합니다. 둘 중 하나라도 이미 있으면 그 파일들을 보이고 멈춥니다. 덮어쓰려면 `--force`를 붙이세요.
+
 ```python
 from PySide6.QtWidgets import QApplication
 from ui import theme
@@ -122,9 +124,13 @@ venv/bin/python gallery.py dark
 
 질문과 버그 보고는 이 저장소의 GitHub 이슈에 남겨 주세요. 규칙이나 슬롭 징후에 문제가 있으면 플랫폼, 화면, 기대한 결과를 함께 적어 주세요.
 
+규칙 수정, 출처가 있는 새 슬롭 징후, 번역은 풀 리퀘스트로 받습니다. 하나에 변경 하나만 담고, 열기 전에 [개발](#개발)의 테스트와 린트를 돌려 주세요.
+
 ## 보안
 
 스킬은 훅을 설치하지 않고 스스로 아무것도 실행하지 않습니다. 스크립트는 에이전트나 사용자가 부를 때만 돌고, 지정한 프로젝트 폴더 안에만 씁니다(절대 경로와 `..`는 거부하고, `--force` 없이는 기존 파일을 덮어쓰지 않음). 네트워크에 접속하지 않습니다.
+
+취약점은 공개 이슈 대신 이 저장소 Security 탭의 **Report a vulnerability**로 알려 주세요.
 
 ## 라이선스
 

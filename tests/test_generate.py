@@ -1,5 +1,6 @@
 # 프로젝트에 만든 테마 파일이 원본 폴더 없이 혼자 동작하는지.
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -99,3 +100,12 @@ def test_existing_files_stop_without_force(tmp_path):
 def test_paths_outside_project_are_refused(tmp_path, bad):
     assert generate(tmp_path, "--theme", bad).returncode != 0
     assert not list(tmp_path.iterdir())
+
+
+def test_non_utf8_console_does_not_crash(tmp_path):
+    # 영어 Windows 콘솔(cp1252)에서 한글 경로를 출력하다 종료 코드 1 이 나던 문제 (CI windows 3.10)
+    env = {**os.environ, "PYTHONIOENCODING": "cp1252"}
+    result = subprocess.run(
+        [sys.executable, str(_GENERATE), str(tmp_path / "앱 폴더")], check=False, capture_output=True, env=env
+    )
+    assert result.returncode == 0, result.stderr
