@@ -61,6 +61,11 @@ def _activate(window):
     window.activateWindow()
     if not QTest.qWaitForWindowActive(window):
         pytest.skip("OS refused to activate the test window (another app is in front)")
+    # 헤드리스 macOS CI 는 활성이라 보고하고도 키보드 포커스를 주지 않는다
+    window.setFocus()
+    QApplication.processEvents()
+    if not window.hasFocus():
+        pytest.skip("OS gave the active test window no keyboard focus (headless runner)")
 
 
 def _needs_color_scheme(app):

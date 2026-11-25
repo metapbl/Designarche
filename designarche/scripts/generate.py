@@ -43,6 +43,9 @@ def render(theme: PurePosixPath, icons: PurePosixPath) -> str:
 
 
 def main() -> None:
+    # 영어 콘솔(cp1252)에서도 비ASCII 경로를 출력하다 죽지 않게
+    for stream in (sys.stdout, sys.stderr):
+        stream.reconfigure(errors="backslashreplace")  # type: ignore[union-attr]
     parser = argparse.ArgumentParser()
     parser.add_argument("project", type=Path)
     parser.add_argument("--theme", default="ui/theme.py", help="만들 테마 파일 (프로젝트 기준)")
@@ -57,14 +60,14 @@ def main() -> None:
     targets = [theme_file, *(icon_dir / svg.name for svg in svgs)]
     existing = [str(path) for path in targets if path.exists()]
     if existing and not args.force:
-        sys.exit("이미 있어 멈춥니다 (--force 로 덮어쓰기):\n" + "\n".join(existing))
+        sys.exit("Already exists, stopping (use --force to overwrite):\n" + "\n".join(existing))
 
     theme_file.parent.mkdir(parents=True, exist_ok=True)
     icon_dir.mkdir(parents=True, exist_ok=True)
     theme_file.write_text(render(theme, icons), encoding="utf-8", newline="\n")
     for svg in svgs:
         shutil.copyfile(svg, icon_dir / svg.name)
-    print(f"{theme_file}\n{icon_dir} ({len(svgs)}개)")
+    print(f"{theme_file}\n{icon_dir} ({len(svgs)} icons)")
 
 
 if __name__ == "__main__":
