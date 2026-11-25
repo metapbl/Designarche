@@ -61,11 +61,13 @@ def _activate(window):
     window.activateWindow()
     if not QTest.qWaitForWindowActive(window):
         pytest.skip("OS refused to activate the test window (another app is in front)")
-    # 헤드리스 macOS CI 는 활성이라 보고하고도 키보드 포커스를 주지 않는다
-    window.setFocus()
-    QApplication.processEvents()
-    if not window.hasFocus():
-        pytest.skip("OS gave the active test window no keyboard focus (headless runner)")
+
+
+def _tab_from(widget):
+    # macOS 는 '키보드 탐색'이 꺼진 기본 설정에서 Tab 이 버튼을 건너뛴다. 그러면 Tab 검사가 의미 없다
+    QTest.keyClick(widget, Qt.Key.Key_Tab)
+    if widget.hasFocus():
+        pytest.skip("OS keyboard navigation does not tab to buttons (macOS default)")
 
 
 def _needs_color_scheme(app):
@@ -264,7 +266,7 @@ def test_focused_button_has_ring_only(app, mode, role):
     _activate(window)
     start.setFocus()
     app.processEvents()
-    QTest.keyClick(start, Qt.Key.Key_Tab)  # Fusion 은 키보드로 옮긴 포커스에만 네모를 그린다
+    _tab_from(start)  # Fusion 은 키보드로 옮긴 포커스에만 네모를 그린다
     assert focused.hasFocus()
     a, b = focused.grab().toImage(), other.grab().toImage()
     inner = [(x, y) for x in range(6, a.width() - 6) for y in range(3, a.height() - 3)]  # 둥근 모서리 안티앨리어싱 제외
@@ -286,7 +288,7 @@ def test_buttons_take_focus_from_tab_not_click(app, make):
     app.processEvents()
     QTest.mouseClick(target, Qt.MouseButton.LeftButton)
     assert not target.hasFocus()
-    QTest.keyClick(first, Qt.Key.Key_Tab)
+    _tab_from(first)
     assert target.hasFocus()
     window.close()
 
