@@ -33,14 +33,6 @@ Designarche は AI コーディングエージェント向けのスキルです�
 
 どの言語やフレームワークでも使えます。スキルは普通の Markdown と小さな Python スクリプトだけで、フックも、勝手に動くものもありません。
 
-## スクリーンショット
-
-Graphite/Paper テーマのウィジェット一覧。左がライト、右がダークです。
-
-| Paper（ライト） | Graphite（ダーク） |
-|---|---|
-| <img src="images/gallery-light-v1.png" alt="ライトの Paper テーマのウィジェット一覧：役割別のボタン、入力欄、チェックボックス、リスト、表、スライダー、22 の色名"> | <img src="images/gallery-dark-v1.png" alt="同じウィジェット一覧をダークの Graphite テーマで表示したもの"> |
-
 ## インストール
 
 スキルは `designarche` フォルダーです。エージェントがスキルを探す場所にコピー（またはリンク）してください。
@@ -84,6 +76,12 @@ Codex では `~/.claude/skills` の代わりに `~/.agents/skills` を使いま�
 ## PySide6 テーマ
 
 Graphite（ダーク）と Paper（ライト）は、Windows と macOS の PySide6 デスクトップアプリと PyInstaller ビルド向けのテーマです。Python 3.10 以上と PySide6 6.8 以上が必要です。ジェネレーターはテーマファイル 1 つとアイコンフォルダーだけをアプリに入れ、このリポジトリのほかのものはアプリに入りません。
+
+Graphite/Paper テーマのウィジェット一覧。左がライト、右がダークです。
+
+| Paper（ライト） | Graphite（ダーク） |
+|---|---|
+| <img src="images/gallery-light-v2.png" alt="ライトの Paper テーマのウィジェット一覧：役割別のボタン、入力欄、チェックボックス、リスト、表、スライダー、22 の色名"> | <img src="images/gallery-dark-v2.png" alt="同じウィジェット一覧をダークの Graphite テーマで表示したもの"> |
 
 ```bash
 python designarche/scripts/generate.py <app root> --theme ui/theme.py --icons assets/icons

@@ -31,14 +31,6 @@ Designarche is a skill for AI coding agents. When the agent builds a screen or t
 
 It works in any language or framework. The skill is plain Markdown plus small Python scripts, with no hooks and nothing that runs on its own.
 
-## Screenshots
-
-The Graphite/Paper theme's widget gallery, light on the left and dark on the right.
-
-| Paper (light) | Graphite (dark) |
-|---|---|
-| <img src="images/gallery-light-v1.png" alt="Widget gallery in the light Paper theme: buttons by role, inputs, check boxes, a list, a table, sliders and the 22 color names"> | <img src="images/gallery-dark-v1.png" alt="The same widget gallery in the dark Graphite theme"> |
-
 ## Install
 
 The skill is the `designarche` folder. Copy it (or link it) to where your agent looks for skills.
@@ -82,6 +74,12 @@ If you want the agent to skip its questions, say so up front ("just do it"); it 
 ## The PySide6 theme
 
 Graphite (dark) and Paper (light) is a theme for PySide6 desktop apps and PyInstaller builds on Windows and macOS. It needs Python 3.10+ and PySide6 6.8+. The generator copies one theme file and an icon folder into your app; nothing else from this repository goes into the app.
+
+The Graphite/Paper theme's widget gallery, light on the left and dark on the right.
+
+| Paper (light) | Graphite (dark) |
+|---|---|
+| <img src="images/gallery-light-v2.png" alt="Widget gallery in the light Paper theme: buttons by role, inputs, check boxes, a list, a table, sliders and the 22 color names"> | <img src="images/gallery-dark-v2.png" alt="The same widget gallery in the dark Graphite theme"> |
 
 ```bash
 python designarche/scripts/generate.py <app root> --theme ui/theme.py --icons assets/icons

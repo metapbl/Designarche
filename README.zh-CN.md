@@ -33,14 +33,6 @@ Designarche 是给 AI 编程助手用的技能。助手新建界面或修改已�
 
 适用于任何语言或框架。技能只有普通的 Markdown 和几个小 Python 脚本，没有钩子，也没有会自行运行的东西。
 
-## 截图
-
-Graphite/Paper 主题的控件展示，左边浅色，右边深色。
-
-| Paper（浅色） | Graphite（深色） |
-|---|---|
-| <img src="images/gallery-light-v1.png" alt="浅色 Paper 主题下的控件展示：按角色区分的按钮、输入框、复选框、列表、表格、滑块和 22 个颜色名"> | <img src="images/gallery-dark-v1.png" alt="同一组控件在深色 Graphite 主题下的样子"> |
-
 ## 安装
 
 技能就是 `designarche` 文件夹。把它复制（或链接）到助手查找技能的位置。
@@ -84,6 +76,12 @@ Codex 请把 `~/.claude/skills` 换成 `~/.agents/skills`。之后新开一个�
 ## PySide6 主题
 
 Graphite（深色）和 Paper（浅色）是给 Windows 和 macOS 上的 PySide6 桌面应用及 PyInstaller 构建用的主题，需要 Python 3.10+ 和 PySide6 6.8+。生成器只会把一个主题文件和一个图标文件夹放进你的应用，本仓库的其他内容都不会进入应用。
+
+Graphite/Paper 主题的控件展示，左边浅色，右边深色。
+
+| Paper（浅色） | Graphite（深色） |
+|---|---|
+| <img src="images/gallery-light-v2.png" alt="浅色 Paper 主题下的控件展示：按角色区分的按钮、输入框、复选框、列表、表格、滑块和 22 个颜色名"> | <img src="images/gallery-dark-v2.png" alt="同一组控件在深色 Graphite 主题下的样子"> |
 
 ```bash
 python designarche/scripts/generate.py <app root> --theme ui/theme.py --icons assets/icons

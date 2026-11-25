@@ -33,14 +33,6 @@ Designarche — это навык для ИИ-агентов, которые п�
 
 Работает с любым языком и фреймворком. Навык — это обычный Markdown и небольшие скрипты на Python, без хуков и без того, что запускается само.
 
-## Скриншоты
-
-Галерея виджетов темы Graphite/Paper: слева светлая, справа тёмная.
-
-| Paper (светлая) | Graphite (тёмная) |
-|---|---|
-| <img src="images/gallery-light-v1.png" alt="Галерея виджетов в светлой теме Paper: кнопки по ролям, поля ввода, флажки, список, таблица, ползунки и 22 названия цветов"> | <img src="images/gallery-dark-v1.png" alt="Та же галерея виджетов в тёмной теме Graphite"> |
-
 ## Установка
 
 Навык — это папка `designarche`. Скопируйте её (или создайте ссылку) туда, где ваш агент ищет навыки.
@@ -84,6 +76,12 @@ Copy-Item -Recurse Designarche\designarche "$HOME\.claude\skills\designarche"
 ## Тема для PySide6
 
 Graphite (тёмная) и Paper (светлая) — тема для настольных приложений на PySide6 и сборок PyInstaller в Windows и macOS. Нужны Python 3.10+ и PySide6 6.8+. Генератор копирует в приложение только один файл темы и папку иконок; больше ничего из этого репозитория в приложение не попадает.
+
+Галерея виджетов темы Graphite/Paper: слева светлая, справа тёмная.
+
+| Paper (светлая) | Graphite (тёмная) |
+|---|---|
+| <img src="images/gallery-light-v2.png" alt="Галерея виджетов в светлой теме Paper: кнопки по ролям, поля ввода, флажки, список, таблица, ползунки и 22 названия цветов"> | <img src="images/gallery-dark-v2.png" alt="Та же галерея виджетов в тёмной теме Graphite"> |
 
 ```bash
 python designarche/scripts/generate.py <app root> --theme ui/theme.py --icons assets/icons

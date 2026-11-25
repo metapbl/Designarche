@@ -63,7 +63,7 @@ def _group(title: str, *widgets: QWidget, layout=QVBoxLayout) -> QGroupBox:
 class Gallery(QMainWindow):
     def __init__(self, mode: str):
         super().__init__()
-        self.setWindowTitle("Graphite / Paper 갤러리")
+        self.setWindowTitle("Graphite / Paper gallery")
         root = QWidget()
         self.setCentralWidget(root)
         grid = QGridLayout(root)
@@ -88,18 +88,18 @@ class Gallery(QMainWindow):
             radio.clicked.connect(lambda _checked, n=name: theme.apply_theme(QApplication.instance(), n))
             self._modes.addButton(radio)
             row.append(radio)
-        return _group("테마 (실행 중 전환)", *row, layout=QHBoxLayout)
+        return _group("Theme (switch while running)", *row, layout=QHBoxLayout)
 
     def _buttons(self) -> QGroupBox:
-        tip = _button("secondary (툴팁)")
-        tip.setToolTip("QToolTip 스타일 확인")
-        toggle = _button("토글 켜짐")
+        tip = _button("secondary (tooltip)")
+        tip.setToolTip("QToolTip style check")
+        toggle = _button("toggle on")
         toggle.setCheckable(True)
         toggle.setChecked(True)
-        focused = _button("포커스")
+        focused = _button("focus")
         QTimer.singleShot(0, focused.setFocus)
         return _group(
-            "버튼 역할",
+            "Button roles",
             _button("primary", "primary"),
             tip,
             _button("danger", "danger"),
@@ -115,31 +115,31 @@ class Gallery(QMainWindow):
         disabled = QLineEdit("disabled")
         disabled.setEnabled(False)
         combo = QComboBox()
-        combo.addItems(["콤보박스 항목 1", "콤보박스 항목 2"])
+        combo.addItems(["Combo box item 1", "Combo box item 2"])
         spin = QSpinBox()
         spin.setValue(42)
-        text = QPlainTextEdit("여러 줄 입력\nQPlainTextEdit")
+        text = QPlainTextEdit("Multi-line input\nQPlainTextEdit")
         text.setFixedHeight(56)
-        return _group("입력창", QLineEdit("한글 입력 값"), placeholder, disabled, combo, spin, text)
+        return _group("Inputs", QLineEdit("한글 입력 값"), placeholder, disabled, combo, spin, text)
 
     def _indicators(self) -> QGroupBox:
-        checked = QCheckBox("체크됨")
+        checked = QCheckBox("checked")
         checked.setChecked(True)
-        off = QCheckBox("체크 안 됨")
+        off = QCheckBox("unchecked")
         off_disabled = QCheckBox("disabled")
         off_disabled.setEnabled(False)
-        on_disabled = QCheckBox("disabled 체크됨")
+        on_disabled = QCheckBox("disabled checked")
         on_disabled.setChecked(True)
         on_disabled.setEnabled(False)
-        radio_on = QRadioButton("라디오 선택됨")
+        radio_on = QRadioButton("radio selected")
         radio_on.setChecked(True)
         radio_disabled = QRadioButton("disabled")
         radio_disabled.setEnabled(False)
-        box = QGroupBox("체크박스·라디오")
+        box = QGroupBox("Check boxes and radios")
         grid = QGridLayout(box)
         for i, w in enumerate((checked, off, off_disabled, on_disabled)):
             grid.addWidget(w, 0, i)
-        for i, w in enumerate((radio_on, QRadioButton("라디오"), radio_disabled)):
+        for i, w in enumerate((radio_on, QRadioButton("radio"), radio_disabled)):
             grid.addWidget(w, 1, i)
         return box
 
@@ -151,26 +151,26 @@ class Gallery(QMainWindow):
         slider_off = QSlider(Qt.Orientation.Horizontal)
         slider_off.setValue(70)
         slider_off.setEnabled(False)
-        return _group("진행률·슬라이더", bar, slider, slider_off)
+        return _group("Progress and sliders", bar, slider, slider_off)
 
     def _views(self) -> QGroupBox:
         items = QListWidget()
         for i in range(30):
-            item = QListWidgetItem(f"목록 항목 {i + 1}")
+            item = QListWidgetItem(f"List item {i + 1}")
             item.setCheckState(Qt.CheckState.Checked if i % 2 else Qt.CheckState.Unchecked)
             items.addItem(item)
         items.setCurrentRow(1)
         table = QTableWidget(30, 8)
         table.setAlternatingRowColors(True)
-        table.setHorizontalHeaderLabels([f"열 {c + 1}" for c in range(8)])
+        table.setHorizontalHeaderLabels([f"Column {c + 1}" for c in range(8)])
         for r in range(30):
             for c in range(8):
                 table.setItem(r, c, QTableWidgetItem(f"{r + 1}-{c + 1}"))
         table.selectRow(2)
-        return _group("목록·표·스크롤바", items, table)
+        return _group("List, table, scroll bars", items, table)
 
     def _swatches(self) -> QGroupBox:
-        box = QGroupBox("색 이름 22개")
+        box = QGroupBox("22 color names")
         grid = QGridLayout(box)
         grid.setSpacing(2)
         self._swatch_labels = {}

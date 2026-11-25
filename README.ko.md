@@ -33,14 +33,6 @@ Designarche는 AI 코딩 에이전트용 스킬입니다. 에이전트가 화면
 
 어떤 언어나 프레임워크에서도 씁니다. 스킬은 평범한 Markdown과 작은 Python 스크립트뿐이고, 훅도 없고 혼자 실행되는 것도 없습니다.
 
-## 스크린샷
-
-Graphite/Paper 테마의 위젯 갤러리입니다. 왼쪽이 라이트, 오른쪽이 다크입니다.
-
-| Paper (라이트) | Graphite (다크) |
-|---|---|
-| <img src="images/gallery-light-v1.png" alt="라이트 Paper 테마의 위젯 갤러리: 역할별 버튼, 입력창, 체크박스, 목록, 표, 슬라이더, 색 이름 22개"> | <img src="images/gallery-dark-v1.png" alt="같은 위젯 갤러리를 다크 Graphite 테마로 본 화면"> |
-
 ## 설치
 
 스킬은 `designarche` 폴더입니다. 에이전트가 스킬을 찾는 곳에 복사(또는 링크)하세요.
@@ -84,6 +76,12 @@ Codex는 `~/.claude/skills` 대신 `~/.agents/skills`를 씁니다. 설치한 �
 ## PySide6 테마
 
 Graphite(다크)와 Paper(라이트)는 Windows와 macOS의 PySide6 데스크톱 앱과 PyInstaller 빌드용 테마입니다. Python 3.10 이상, PySide6 6.8 이상이 필요합니다. 생성기는 테마 파일 하나와 아이콘 폴더만 앱에 넣고, 이 저장소의 다른 것은 앱에 들어가지 않습니다.
+
+Graphite/Paper 테마의 위젯 갤러리입니다. 왼쪽이 라이트, 오른쪽이 다크입니다.
+
+| Paper (라이트) | Graphite (다크) |
+|---|---|
+| <img src="images/gallery-light-v2.png" alt="라이트 Paper 테마의 위젯 갤러리: 역할별 버튼, 입력창, 체크박스, 목록, 표, 슬라이더, 색 이름 22개"> | <img src="images/gallery-dark-v2.png" alt="같은 위젯 갤러리를 다크 Graphite 테마로 본 화면"> |
 
 ```bash
 python designarche/scripts/generate.py <app root> --theme ui/theme.py --icons assets/icons

@@ -33,14 +33,6 @@ Designarche es una skill para agentes de programación con IA. Cuando el agente 
 
 Funciona con cualquier lenguaje o framework. La skill es Markdown simple más pequeños scripts de Python, sin hooks y sin nada que se ejecute por su cuenta.
 
-## Capturas
-
-La galería de widgets del tema Graphite/Paper, claro a la izquierda y oscuro a la derecha.
-
-| Paper (claro) | Graphite (oscuro) |
-|---|---|
-| <img src="images/gallery-light-v1.png" alt="Galería de widgets con el tema claro Paper: botones por rol, campos de entrada, casillas, una lista, una tabla, deslizadores y los 22 nombres de color"> | <img src="images/gallery-dark-v1.png" alt="La misma galería de widgets con el tema oscuro Graphite"> |
-
 ## Instalación
 
 La skill es la carpeta `designarche`. Cópiala (o enlázala) donde tu agente busca las skills.
@@ -84,6 +76,12 @@ Si quieres que el agente no haga preguntas, dilo desde el principio ("hazlo y ya
 ## El tema de PySide6
 
 Graphite (oscuro) y Paper (claro) es un tema para apps de escritorio con PySide6 y compilaciones con PyInstaller en Windows y macOS. Necesita Python 3.10+ y PySide6 6.8+. El generador copia en tu app un solo archivo de tema y una carpeta de iconos; nada más de este repositorio entra en la app.
+
+La galería de widgets del tema Graphite/Paper, claro a la izquierda y oscuro a la derecha.
+
+| Paper (claro) | Graphite (oscuro) |
+|---|---|
+| <img src="images/gallery-light-v2.png" alt="Galería de widgets con el tema claro Paper: botones por rol, campos de entrada, casillas, una lista, una tabla, deslizadores y los 22 nombres de color"> | <img src="images/gallery-dark-v2.png" alt="La misma galería de widgets con el tema oscuro Graphite"> |
 
 ```bash
 python designarche/scripts/generate.py <app root> --theme ui/theme.py --icons assets/icons
